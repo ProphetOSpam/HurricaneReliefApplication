@@ -1,0 +1,46 @@
+{
+    "entries": {
+        "bd722ad7-8f91-40f8-ac38-4c7e0ba20ba1": {
+            "name": "Helene",
+            "formed": [
+                9,
+                24,
+                2024
+            ],
+            "dissipated": [
+                9,
+                29,
+                2024
+            ],
+            "affectedAreas": [
+                "FL",
+                "GA",
+                "SC",
+                "NC",
+                "TN",
+                "VA",
+                "IN"
+            ]
+        },
+        "46d15588-652f-40f1-88f3-8e1f5fb4d1c6": {
+            "name": "Debby",
+            "formed": [
+                8,
+                3,
+                2024
+            ],
+            "dissipated": [
+                8,
+                11,
+                2024
+            ],
+            "affectedAreas": [
+                "PR",
+                "FL",
+                "GA",
+                "SC",
+                "NC"
+            ]
+        }
+    }
+}
