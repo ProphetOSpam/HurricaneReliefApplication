@@ -6,6 +6,14 @@
                 {
                     "resource": "Water Bottles",
                     "amount": "4 cases"
+                },
+                {
+                    "resource": "Beans",
+                    "amount": "100 cans"
+                },
+                {
+                    "resource": "Beds",
+                    "amount": "20"
                 }
             ],
             "location": {
@@ -23,6 +31,10 @@
                 {
                     "resource": "Dog Food",
                     "amount": "2 bags"
+                },
+                {
+                    "resource": "Insulin",
+                    "amount": "500 units"
                 }
             ],
             "location": {
