@@ -1,0 +1,38 @@
+{
+    "entries": {
+        "0c8556c5-d0b8-4f59-a56a-085b812c3fd8": {
+            "owner": "ae3e292c-37d7-42f9-bbf6-b2f70d0fd31f",
+            "resources": [
+                {
+                    "resource": "Water Bottles",
+                    "amount": "4 cases"
+                }
+            ],
+            "location": {
+                "__internal_type": "address",
+                "streetAddress": "2W4V+PC",
+                "city": "Columbia",
+                "state": "SC",
+                "zipCode": "29201",
+                "country": "United States"
+            }
+        },
+        "602ec042-3062-4c9d-af0a-eaeb6818f71e": {
+            "owner": "ae3e292c-37d7-42f9-bbf6-b2f70d0fd31f",
+            "resources": [
+                {
+                    "resource": "Dog Food",
+                    "amount": "2 bags"
+                }
+            ],
+            "location": {
+                "__internal_type": "address",
+                "streetAddress": "1100 Taylor St",
+                "city": "Columbia",
+                "state": "SC",
+                "zipCode": "29201",
+                "country": "United States"
+            }
+        }
+    }
+}
