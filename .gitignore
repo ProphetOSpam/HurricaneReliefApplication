@@ -3,13 +3,12 @@
 
 # Ignore Gradle build output directory
 build
+bin
 
 # Ignore Kotlin plugin data
 .kotlin
 
+# jdt.ls
 .settings
-
-bin
-
 .classpath
 .project
