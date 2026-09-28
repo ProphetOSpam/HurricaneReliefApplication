@@ -12,5 +12,5 @@ relief.
 # Documents
 [Requirements Doc](./docs/requirements.pdf)
 [UML Class Diagram](./docs/uml-class-diagram.pdf)
-[Sequence Diagram, Creating a Request](./docs/uml-sequence-diagram1.pdf)
-[Sequence Diagram, Creating a Shelter](./docs/uml-sequence-diagram2.pdf)
+[Sequence Diagram 1: Creating a Request](./docs/uml-sequence-diagram1.pdf)
+[Sequence Diagram 2: Creating a Shelter](./docs/uml-sequence-diagram2.pdf)
