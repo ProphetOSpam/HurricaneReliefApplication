@@ -4,6 +4,7 @@
 # Ignore Gradle build output directory
 build
 bin
+target/
 
 # Ignore Kotlin plugin data
 .kotlin
