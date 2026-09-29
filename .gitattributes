@@ -7,6 +7,9 @@
 # These are Windows script files and should use crlf
 *.bat           text eol=crlf
 
+# Use lf for source code
+*.java          text eol=lf
+
 # Binary files should be left untouched
 *.jar           binary
 
