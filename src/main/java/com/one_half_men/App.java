@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import com.one_half_men.db.Database;
+import com.one_half_men.json.DataWriter;
+
 /**
  * JavaFX App
  */
@@ -33,6 +36,14 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch();
-    }
 
+        Database<Integer> db = new Database<>() {
+        };
+
+        try {
+            DataWriter.writeDatabase(db);
+        } catch (IOException e) {
+            System.err.println(e);
+        }
+    }
 }
