@@ -72,7 +72,7 @@ public class QueryProcessor extends AbstractProcessor {
                 .filter(e -> e.getKind() == ElementKind.FIELD)
                 .map(field -> {
                     TypeName optionalFieldType = TypeName.get(typeUtils.getDeclaredType(
-                            elementUtils.getTypeElement("java.util.Optional"),
+                            elementUtils.getTypeElement(Optional.class.getCanonicalName()),
                             field.asType()));
 
                     FieldSpec fieldSpec = FieldSpec
