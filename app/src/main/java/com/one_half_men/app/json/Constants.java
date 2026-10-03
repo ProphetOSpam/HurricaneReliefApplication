@@ -1,4 +1,4 @@
-package com.one_half_men.json;
+package com.one_half_men.app.json;
 
 public class Constants {
     public static final String HURRICANE_DB = "./json/hurricane_db.json";

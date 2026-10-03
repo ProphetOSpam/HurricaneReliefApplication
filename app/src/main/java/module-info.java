@@ -1,4 +1,4 @@
-module com.one_half_men {
+module com.one_half_men.app {
     requires javafx.controls;
     requires javafx.fxml;
     requires tools.jackson.core;
@@ -9,7 +9,7 @@ module com.one_half_men {
 
     requires com.one_half_men.annotations;
 
-    opens com.one_half_men to javafx.fxml;
+    opens com.one_half_men.app to javafx.fxml;
 
-    exports com.one_half_men;
+    exports com.one_half_men.app;
 }

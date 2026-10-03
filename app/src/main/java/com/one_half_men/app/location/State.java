@@ -1,4 +1,4 @@
-package com.one_half_men.location;
+package com.one_half_men.app.location;
 
 // TODO: Finish all states (maybe territories? nahhh. Maybe just Puerto Rico)
 public enum State {

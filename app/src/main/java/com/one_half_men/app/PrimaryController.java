@@ -1,4 +1,4 @@
-package com.one_half_men;
+package com.one_half_men.app;
 
 import java.io.IOException;
 import javafx.fxml.FXML;

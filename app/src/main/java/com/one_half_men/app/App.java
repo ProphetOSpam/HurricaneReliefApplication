@@ -1,4 +1,4 @@
-package com.one_half_men;
+package com.one_half_men.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,8 +8,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import com.one_half_men.db.Database;
-import com.one_half_men.json.DataWriter;
+import com.one_half_men.app.db.Database;
+import com.one_half_men.app.json.DataWriter;
 
 /**
  * JavaFX App

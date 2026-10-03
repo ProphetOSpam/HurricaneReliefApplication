@@ -1,9 +1,9 @@
-package com.one_half_men.json;
+package com.one_half_men.app.json;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.one_half_men.db.Database;
+import com.one_half_men.app.db.Database;
 
 import tools.jackson.databind.ObjectMapper;
 
