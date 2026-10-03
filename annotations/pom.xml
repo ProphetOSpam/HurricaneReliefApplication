@@ -11,11 +11,14 @@
     <artifactId>hurricane_relief_project_annotations</artifactId>
 
     <dependencies>
+        <!-- Javapoet -->
         <dependency>
             <groupId>com.palantir.javapoet</groupId>
             <artifactId>javapoet</artifactId>
             <version>0.20.0</version>
         </dependency>
+
+        <!-- Google Auto -->
         <dependency>
             <groupId>com.google.auto.service</groupId>
             <artifactId>auto-service-annotations</artifactId>
@@ -31,12 +34,12 @@
                 <version>3.16.0</version>
                 <configuration>
                 <release>21</release>
-                <annotationProcessorPaths>
-                <path>
-                    <groupId>com.google.auto.service</groupId>
-                    <artifactId>auto-service</artifactId>
-                    <version>1.1.1</version>
-                </path>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.google.auto.service</groupId>
+                            <artifactId>auto-service</artifactId>
+                            <version>1.1.1</version>
+                        </path>
                 </annotationProcessorPaths>
                 </configuration>
             </plugin>
