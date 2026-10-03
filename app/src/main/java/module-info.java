@@ -7,6 +7,8 @@ module com.one_half_men {
 
     requires lombok;
 
+    requires com.one_half_men.annotations;
+
     opens com.one_half_men to javafx.fxml;
 
     exports com.one_half_men;
