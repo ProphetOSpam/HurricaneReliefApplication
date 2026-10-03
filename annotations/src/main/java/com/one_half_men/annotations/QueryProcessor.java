@@ -27,6 +27,8 @@ import com.palantir.javapoet.JavaFile;
 import com.palantir.javapoet.TypeName;
 import com.palantir.javapoet.TypeSpec;
 
+import lombok.Builder;
+
 @SupportedAnnotationTypes({ "com.one_half_men.annotations.*" })
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @AutoService(Processor.class)
@@ -85,11 +87,13 @@ public class QueryProcessor extends AbstractProcessor {
         AnnotationSpec generated = AnnotationSpec.builder(Generated.class)
                 .addMember("value", String.format("\"%s\"", getClass().getPackageName()))
                 .build();
-        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(queryClassName)
+
+        TypeSpec classBuilder = TypeSpec.classBuilder(queryClassName)
                 .addFields((Iterable<FieldSpec>) fields::iterator)
                 .addAnnotation(generated)
+                .addAnnotation(Builder.class).build();
 
-        JavaFile javaFile = JavaFile.builder(pkg.toString(), classBuilder.build()).build();
+        JavaFile javaFile = JavaFile.builder(pkg.toString(), classBuilder).build();
 
         javaFile.writeTo(processingEnv.getFiler());
     }
