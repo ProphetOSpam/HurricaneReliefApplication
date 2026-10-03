@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Generated;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -20,6 +21,7 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import com.google.auto.service.AutoService;
+import com.palantir.javapoet.AnnotationSpec;
 import com.palantir.javapoet.FieldSpec;
 import com.palantir.javapoet.JavaFile;
 import com.palantir.javapoet.TypeName;
@@ -80,9 +82,12 @@ public class QueryProcessor extends AbstractProcessor {
 
         String queryClassName = element.getSimpleName() + QUERY_SUFFIX;
 
-        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(queryClassName);
-
-        classBuilder.addFields((Iterable<FieldSpec>) fields::iterator);
+        AnnotationSpec generated = AnnotationSpec.builder(Generated.class)
+                .addMember("value", String.format("\"%s\"", getClass().getPackageName()))
+                .build();
+        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(queryClassName)
+                .addFields((Iterable<FieldSpec>) fields::iterator)
+                .addAnnotation(generated)
 
         JavaFile javaFile = JavaFile.builder(pkg.toString(), classBuilder.build()).build();
 
