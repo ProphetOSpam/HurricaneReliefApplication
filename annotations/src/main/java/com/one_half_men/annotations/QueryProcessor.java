@@ -88,6 +88,7 @@ public class QueryProcessor extends AbstractProcessor {
                 .build();
 
         TypeSpec classBuilder = TypeSpec.classBuilder(queryClassName)
+                .addModifiers(Modifier.PUBLIC)
                 .addFields((Iterable<FieldSpec>) fields::iterator)
                 .addAnnotation(generated)
                 .addAnnotation(Builder.class).build();
