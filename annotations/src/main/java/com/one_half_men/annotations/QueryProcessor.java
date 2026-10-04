@@ -29,7 +29,7 @@ import com.palantir.javapoet.TypeSpec;
 import lombok.Builder;
 
 @SupportedAnnotationTypes({ "com.one_half_men.annotations.*" })
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_21)
 @AutoService(Processor.class)
 public class QueryProcessor extends AbstractProcessor {
     protected static final String QUERY_SUFFIX = "Query";
