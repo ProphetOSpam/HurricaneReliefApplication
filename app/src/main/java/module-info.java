@@ -8,6 +8,7 @@ module com.one_half_men.app {
     requires lombok;
 
     requires com.one_half_men.annotations;
+    requires google.maps.services;
 
     opens com.one_half_men.app to javafx.fxml;
 
