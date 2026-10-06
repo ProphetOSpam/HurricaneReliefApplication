@@ -12,5 +12,5 @@ module com.one_half_men.app {
 
     opens com.one_half_men.app to javafx.fxml;
 
-    // Don't export modules because this isn't used by anything else
+    exports com.one_half_men.app;
 }

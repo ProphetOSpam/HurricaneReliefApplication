@@ -1,4 +1,5 @@
-package com.one_half_men.app;
+// In it's own package to avoid exporting everything
+package com.one_half_men.app.hurricane_application;
 
 import java.util.Optional;
 import java.util.Set;
