@@ -11,6 +11,7 @@ module com.one_half_men.app {
     requires google.maps.services;
 
     opens com.one_half_men.app to javafx.fxml;
+    opens com.one_half_men.app.page to javafx.fxml;
 
     exports com.one_half_men.app;
 }
