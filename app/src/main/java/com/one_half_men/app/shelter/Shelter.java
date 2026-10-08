@@ -20,4 +20,13 @@ public class Shelter {
     private @Getter @Setter Set<Resource> resources;
     private @Getter @Setter Set<Accomodation> accomodations;
     private @Getter @Setter Set<Species> allowedPets;
+
+    public Shelter(User owner, String name, Location location, Set<Resource> resources, Set<Accomodation> accomodations, Set<Species> allowedPets) {
+        this.owner = owner;
+        this.name = name;
+        this.location = location;
+        this.resources = resources;
+        this.accomodations = accomodations;
+        this.allowedPets = allowedPets;
+    }
 }
