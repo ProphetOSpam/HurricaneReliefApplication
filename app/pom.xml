@@ -10,16 +10,8 @@
 
     <artifactId>hurricane_relief_project_app</artifactId>
 
-    <!-- From https://github.com/FasterXML/jackson/blob/main/jackson3/MIGRATING_TO_JACKSON_3.md, ensures various jackson versions are compatible -->
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>tools.jackson</groupId>
-                <artifactId>jackson-bom</artifactId>
-                <version>3.1.7</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>   
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
@@ -35,11 +27,6 @@
     </properties>
 
     <dependencies>
-        <!-- Jackson -->
-        <dependency>
-            <groupId>tools.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
 
         <!-- Lombok -->
         <dependency>
