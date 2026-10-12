@@ -2,7 +2,7 @@ package com.one_half_men.app.request;
 
 import java.util.Date;
 import java.util.Optional;
-import java.util.SortedSet;
+import java.util.Set;
 
 import com.one_half_men.annotations.Query;
 import com.one_half_men.app.being.Being;
@@ -18,14 +18,15 @@ import lombok.Setter;
 public class Request {
     private @Getter @Setter User author;
     private @Getter @Setter Optional<User> owner;
-    private @Getter SortedSet<User> participants;
+    private @Getter Set<User> participants;
     private @Getter @Setter Date date;
     private @Getter @Setter Optional<CloseReason> closeReason;
     private @Getter @Setter Location location;
     private @Getter @Setter String description;
-    private @Getter SortedSet<Being> beings;
+    private @Getter Set<Being> beings;
 
-    public Request(User author, Optional<User> owner, SortedSet<User> participants, Date date, Optional<CloseReason> closeReason, Location location, String description, SortedSet<Being> beings) {
+    public Request(User author, Optional<User> owner, Set<User> participants, Date date,
+            Optional<CloseReason> closeReason, Location location, String description, Set<Being> beings) {
         this.author = author;
         this.owner = owner;
         this.participants = participants;
