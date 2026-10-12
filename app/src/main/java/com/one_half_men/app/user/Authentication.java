@@ -1,0 +1,106 @@
+package com.one_half_men.app.user;
+
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
+import com.one_half_men.app.hurricane_application.HurricaneApplication;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+public class Authentication {
+    private static final Charset ASCII = StandardCharsets.US_ASCII;
+    private static final CharsetEncoder ASCII_ENCODER = ASCII.newEncoder();
+
+    private Authentication() {
+    }
+
+    public static class Username {
+        private static final int MIN_LENGTH = 2;
+        private static final int MAX_LENGTH = 64;
+
+        private Username() {
+        }
+
+        public static boolean isValid(String username) {
+            return username.length() >= MIN_LENGTH
+                    && username.length() <= MAX_LENGTH
+                    && ASCII_ENCODER.canEncode(username);
+        }
+    }
+
+    public static class Password {
+        private Password() {
+        }
+
+        private static final int MIN_LENGTH = 8;
+        private static final int MAX_LENGTH = 48;
+
+        public static boolean isValid(String password) {
+            return password.length() >= MIN_LENGTH
+                    && password.length() <= MAX_LENGTH
+                    && ASCII_ENCODER.canEncode(password);
+        }
+    }
+
+    // TODO: consider replacing with a more robust, secure solution
+    @AllArgsConstructor
+    public static class Key {
+        /** 128-bit salt */
+        private final byte[] salt;
+
+        /** SHA-512 Hash of {Salt + Password} */
+        private final byte[] hash;
+
+        private static final MessageDigest DIGEST;
+
+        static {
+            try {
+                DIGEST = MessageDigest.getInstance("SHA-512");
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+        /**
+         * Creates a new instance with a random salt,
+         * does not do any password validation
+         *
+         * @param password The password to use for hashing
+         */
+        public static Authentication.Key fromPassword(String password) {
+            byte[] salt = new byte[16];
+            HurricaneApplication.RANDOM.nextBytes(salt);
+
+            DIGEST.update(salt);
+            DIGEST.update(password.getBytes(ASCII));
+
+            byte[] hash = DIGEST.digest();
+
+            return new Authentication.Key(salt, hash);
+        }
+
+        /**
+         * Checks if the given password matches the key
+         *
+         * @param password The password to check
+         */
+        public boolean checkPassword(String password) {
+            if (!Password.isValid(password))
+                return false;
+
+            MessageDigest digest = Authentication.Key.DIGEST;
+
+            digest.update(salt);
+            digest.update(password.getBytes(ASCII));
+
+            byte[] newHash = digest.digest();
+
+            return Arrays.equals(hash, newHash);
+        }
+    }
+}
