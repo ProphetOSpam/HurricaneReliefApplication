@@ -33,6 +33,6 @@ public class User {
         this.family = family;
         this.ownedRequests = ownedRequests;
         this.participatingRequests = participatingRequests;
-        this.ownedRequests = ownedRequests;
+        this.ownedShelters = ownedShelters;
     }
 }
