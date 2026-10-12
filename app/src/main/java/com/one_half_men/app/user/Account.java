@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class Account {
+public abstract class Account {
     private String username;
-    private Authentication.Key authentication;
+    private Authentication.Key login;
 }
