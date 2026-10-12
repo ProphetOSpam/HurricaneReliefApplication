@@ -1,7 +1,9 @@
 // In it's own package to avoid exporting everything
 package com.one_half_men.app.hurricane_application;
 
+import java.security.SecureRandom;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -10,9 +12,9 @@ import com.one_half_men.app.db.Key;
 import com.one_half_men.app.error.AccountCreationError;
 import com.one_half_men.app.error.AccountLoginError;
 import com.one_half_men.app.error.PermissionsError;
-import com.one_half_men.app.request.CloseReason;
 import com.one_half_men.app.hurricane.Hurricane;
 import com.one_half_men.app.hurricane.HurricaneQuery;
+import com.one_half_men.app.request.CloseReason;
 import com.one_half_men.app.request.Request;
 import com.one_half_men.app.request.RequestQuery;
 import com.one_half_men.app.shelter.Shelter;
@@ -21,11 +23,14 @@ import com.one_half_men.app.user.User;
 import com.one_half_men.app.user.UserQuery;
 
 public class HurricaneApplication {
-    private Optional<User> loggedInUser;
-    private static HurricaneApplication instance = new HurricaneApplication();
+    public static final Random RANDOM = new SecureRandom();
+
+    private static final HurricaneApplication INSTANCE = new HurricaneApplication();
+
+    private Optional<User> loggedInUser = Optional.empty();
 
     public static HurricaneApplication getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     public Key<User> createAccount(String username, String password) throws AccountCreationError {
@@ -37,6 +42,7 @@ public class HurricaneApplication {
     }
 
     public void logout() {
+        loggedInUser = Optional.empty();
     }
 
     public void addMember(Being being) {

@@ -3,8 +3,8 @@ package com.one_half_men.app.user;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Random;
+
+import com.one_half_men.app.hurricane_application.HurricaneApplication;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +13,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class AuthenticationInfo {
-    private static final Random RANDOM = new SecureRandom();
-
     public static final MessageDigest digest;
     static {
         try {
@@ -36,7 +34,7 @@ public class AuthenticationInfo {
      */
     public static AuthenticationInfo fromPassword(String password) {
         byte[] salt = new byte[16];
-        RANDOM.nextBytes(salt);
+        HurricaneApplication.RANDOM.nextBytes(salt);
 
         digest.update(salt);
         digest.update(password.getBytes(StandardCharsets.US_ASCII));
