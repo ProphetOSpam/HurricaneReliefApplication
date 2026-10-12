@@ -1,7 +1,7 @@
 package com.one_half_men.app.json;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.FileWriter;
 
 import com.one_half_men.app.db.Database;
 
