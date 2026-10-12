@@ -1,5 +1,7 @@
 package com.one_half_men.app.location;
 
+import com.one_half_men.app.distance.Distance;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
