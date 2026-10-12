@@ -1,4 +1,4 @@
-package com.one_half_men.app.location;
+package com.one_half_men.app.distance;
 
 public record Ratio(int numerator, int denominator) {
     public double getDecimal() {
