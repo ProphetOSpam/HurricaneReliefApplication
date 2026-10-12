@@ -17,11 +17,12 @@ public class Shelter {
     private @Getter @Setter User owner;
     private @Getter @Setter String name;
     private @Getter @Setter Location location;
-    private @Getter @Setter Set<Resource> resources;
-    private @Getter @Setter Set<Accomodation> accomodations;
-    private @Getter @Setter Set<Species> allowedPets;
+    private @Getter Set<Resource> resources;
+    private @Getter Set<Accomodation> accomodations;
+    private @Getter Set<Species> allowedPets;
 
-    public Shelter(User owner, String name, Location location, Set<Resource> resources, Set<Accomodation> accomodations, Set<Species> allowedPets) {
+    public Shelter(User owner, String name, Location location, Set<Resource> resources, Set<Accomodation> accomodations,
+            Set<Species> allowedPets) {
         this.owner = owner;
         this.name = name;
         this.location = location;

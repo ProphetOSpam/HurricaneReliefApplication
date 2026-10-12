@@ -1,5 +1,12 @@
 package com.one_half_men.app.request;
 
+import io.avaje.jsonb.Json;
+import lombok.Getter;
+import lombok.Setter;
+
+@Json
+@Getter
+@Setter
 public class CloseReason {
     private CloseReason.Type type;
     private String message;
@@ -9,7 +16,7 @@ public class CloseReason {
         RETRACTED;
     }
 
-    private CloseReason(CloseReason.Type type, String message) {
+    CloseReason(CloseReason.Type type, String message) {
         this.type = type;
         this.message = message;
     }

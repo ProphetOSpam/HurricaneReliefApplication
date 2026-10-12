@@ -2,10 +2,17 @@ package com.one_half_men.app.db;
 
 import java.util.UUID;
 
-public class Key<T> {
-    private final UUID uuid;
+import io.avaje.jsonb.Json;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
-    private Key(UUID uuid) {
+@Json
+@EqualsAndHashCode
+public class Key<T> {
+    private @Getter(AccessLevel.PACKAGE) final UUID uuid;
+
+    Key(UUID uuid) {
         this.uuid = uuid;
     }
 
@@ -13,9 +20,12 @@ public class Key<T> {
         return new Key<T>(UUID.randomUUID());
     }
 
+    public static <T> Key<T> fromString(String name) {
+        return new Key<>(UUID.fromString(name));
+    }
+
     @Override
-    public boolean equals(Object o) {
-        return (o instanceof Key<?> other)
-                && uuid.equals(other.uuid);
+    public String toString() {
+        return uuid.toString();
     }
 }
