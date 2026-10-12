@@ -27,6 +27,12 @@
     </properties>
 
     <dependencies>
+        <!-- Avaje Jsonb -->
+        <dependency>
+            <groupId>io.avaje</groupId>
+            <artifactId>avaje-jsonb</artifactId>
+            <version>3.16</version>
+        </dependency>
 
         <!-- Lombok -->
         <dependency>
