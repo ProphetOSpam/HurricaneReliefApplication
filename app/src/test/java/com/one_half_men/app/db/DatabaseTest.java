@@ -1,13 +1,12 @@
 package com.one_half_men.app.db;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,12 +22,11 @@ import com.one_half_men.app.user.Role;
 import com.one_half_men.app.user.User;
 
 import io.avaje.jsonb.JsonType;
-import io.avaje.jsonb.Jsonb;
 import io.avaje.jsonb.Types;
 
 public class DatabaseTest {
     @Test
-    public void databaseRoundtripInMemory() throws IOException {
+    public void databaseRoundtrip() throws IOException {
         UserDb db = new UserDb();
 
         User user = User.builder()
