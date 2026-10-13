@@ -14,11 +14,13 @@ import io.avaje.jsonb.Json;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 @Json
 @Query
 @EqualsAndHashCode
 @AllArgsConstructor
+@Getter
 @Builder
 public class User {
     private Person person;
