@@ -8,10 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import io.avaje.jsonb.Json;
-import lombok.EqualsAndHashCode;
 
 @Json
-@EqualsAndHashCode
 @AllArgsConstructor
 @Data
 public class Address implements Location {
