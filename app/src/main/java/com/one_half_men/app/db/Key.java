@@ -4,17 +4,15 @@ import java.util.UUID;
 
 import io.avaje.jsonb.Json;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Json
 @EqualsAndHashCode
+@AllArgsConstructor
 public class Key<T> {
     private @Getter(AccessLevel.PACKAGE) final UUID uuid;
-
-    Key(UUID uuid) {
-        this.uuid = uuid;
-    }
 
     public static <T> Key<T> random() {
         return new Key<T>(UUID.randomUUID());
