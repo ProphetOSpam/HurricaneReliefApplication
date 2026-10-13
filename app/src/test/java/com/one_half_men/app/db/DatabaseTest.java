@@ -14,6 +14,8 @@ import com.one_half_men.app.being.Animal;
 import com.one_half_men.app.being.Person;
 import com.one_half_men.app.being.PhoneNumber;
 import com.one_half_men.app.being.Species;
+import com.one_half_men.app.json.DataReader;
+import com.one_half_men.app.json.DataWriter;
 import com.one_half_men.app.json.JsonbInstance;
 import com.one_half_men.app.location.Coordinates;
 import com.one_half_men.app.user.Role;
@@ -48,6 +50,12 @@ public class DatabaseTest {
             assertEquals(db, db2);
         }
 
+        // Writing/Reading to file
+        {
 
+            DataWriter.writeDatabase(db);
+            UserDb db3 = new UserDb(DataReader.readDatabase(db));
+            assertEquals(db, db3);
+        }
     }
 }
