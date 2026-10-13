@@ -25,8 +25,15 @@ public class UserDb extends Database<User> implements Searchable<User, UserQuery
         return JsonbInstance.instance.type(Types.newParameterizedType(BaseDatabase.class, User.class));
     }
 
-    @Override
     public Set<Key<User>> search(UserQuery query) {
-        return Set.of();
+        Set<Key<User>> result = Set.of();
+        for (Key<User> key : base.entries.keySet()) {
+            User user = base.entries.get(key);
+            if (query.equals(user)) {
+                result.add(key);
+            }
+        }
+        return result;
     }
+
 }
