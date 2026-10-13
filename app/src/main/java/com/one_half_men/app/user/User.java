@@ -19,13 +19,14 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @Builder
+@Getter
 @Query
 public class User {
-    private @Getter @Setter Person person;
-    private @Getter @Setter Role role;
-    private @Getter @Setter Location location;
-    private @Builder.Default @Getter SortedSet<Being> family = new TreeSet<>();
-    private @Builder.Default @Getter Set<Request> ownedRequests = new HashSet<>();
-    private @Builder.Default @Getter Set<Request> participatingRequests = new HashSet<>();
-    private @Builder.Default @Getter Set<Shelter> ownedShelters = new HashSet<>();
+    private @Setter Person person;
+    private @Setter Role role;
+    private @Setter Location location;
+    private @Builder.Default SortedSet<Being> family = new TreeSet<>();
+    private @Builder.Default Set<Request> ownedRequests = new HashSet<>();
+    private @Builder.Default Set<Request> participatingRequests = new HashSet<>();
+    private @Builder.Default Set<Shelter> ownedShelters = new HashSet<>();
 }
