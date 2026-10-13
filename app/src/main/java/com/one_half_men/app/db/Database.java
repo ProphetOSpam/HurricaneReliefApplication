@@ -10,6 +10,7 @@ import io.avaje.json.JsonDataException;
 import io.avaje.json.JsonReader;
 import io.avaje.json.JsonWriter;
 import io.avaje.jsonb.AdapterFactory;
+import io.avaje.jsonb.JsonType;
 import io.avaje.jsonb.Jsonb;
 import io.avaje.jsonb.Types;
 import lombok.AccessLevel;
@@ -22,9 +23,20 @@ import lombok.ToString;
 public class Database<V> {
     @Getter(AccessLevel.PACKAGE)
     protected final Map<Key<V>, V> entries;
+    public JsonType<Database<V>> type;
 
-    public Database(Map<Key<V>, V> entries) {
+    protected JsonType<Database<V>> type() {
+        return null;
+    }
+
+    public Database() {
+        entries = new HashMap<>();
+        type = type();
+    }
+
+    protected Database(Map<Key<V>, V> entries) {
         this.entries = entries;
+        type = type();
     }
 
     public Key<V> create(V element) {
@@ -83,7 +95,7 @@ public class Database<V> {
 
         @Override
         public Database<V> fromJson(JsonReader reader) {
-            Database<V> db = new Database<>(new HashMap<>());
+            Database<V> db = new Database<>();
             reader.beginObject();
 
             while (reader.hasNextField()) {
