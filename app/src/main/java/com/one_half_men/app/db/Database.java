@@ -59,19 +59,21 @@ public class Database<V> {
         private final JsonAdapter<V> valueAdapter;
 
         public static final AdapterFactory FACTORY = (type, jsonb) -> {
-            if (Types.isGenericTypeOf(type, Database.class)) {
-
-                return new DatabaseJsonAdapter<>(jsonb, Types.typeArguments(type));
+            if (!Types.isGenericTypeOf(type, Database.class)) {
+                return null;
             }
-            return null;
+
+            Type[] typeArgs = Types.typeArguments(type);
+
+            if (typeArgs.length != 1) {
+                return null;
+            }
+
+            return new DatabaseJsonAdapter<>(jsonb, typeArgs[0]);
         };
 
-        public DatabaseJsonAdapter() {
-            valueAdapter = null;
-        }
-
-        public DatabaseJsonAdapter(Jsonb jsonb, Type[] types) {
-            valueAdapter = jsonb.adapter(types[0]);
+        public DatabaseJsonAdapter(Jsonb jsonb, Type generic) {
+            valueAdapter = jsonb.adapter(generic);
         }
 
         @Override
