@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 @Json
 @Query
@@ -23,9 +24,9 @@ import lombok.Getter;
 @Getter
 @Builder
 public class User {
-    private Person person;
-    private Role role;
-    private Location location;
+    private @Setter Person person;
+    private @Setter Role role;
+    private @Setter Location location;
     private @Builder.Default Set<Being> family = new HashSet<>();
     private @Builder.Default Set<Request> ownedRequests = new HashSet<>();
     private @Builder.Default Set<Request> participatingRequests = new HashSet<>();
