@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.avaje.jsonb.Json;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,16 +13,11 @@ import lombok.Setter;
 @Json.SubType(type = Animal.class)
 @Json.SubType(type = Person.class)
 @EqualsAndHashCode
+@AllArgsConstructor
+@Getter
 public abstract class Being {
-    private @Getter @Setter String firstName;
-    private @Getter @Setter String lastName;
-    private @Getter @Setter Date birthDate;
-    private @Getter @Setter List<SpecialNeed> specialNeeds;
-
-    public Being(String firstName, String lastName, Date birthDate, List<SpecialNeed> specialNeeds) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.specialNeeds = specialNeeds;
-    }
+    private String firstName;
+    private String lastName;
+    private Date birthDate;
+    private @Setter List<SpecialNeed> specialNeeds;
 }

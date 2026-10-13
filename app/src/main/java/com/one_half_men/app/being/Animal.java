@@ -10,9 +10,10 @@ import lombok.Setter;
 
 @Json
 @EqualsAndHashCode(callSuper = false)
+@Getter
+@Setter
 public class Animal extends Being {
-    private @Getter @Setter Species species;
-
+    private Species species;
     public Animal(String firstName, String lastName, Date birthDate, List<SpecialNeed> specialNeeds, Species species) {
         super(firstName, lastName, birthDate, specialNeeds);
         this.species = species;
