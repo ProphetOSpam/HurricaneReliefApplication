@@ -24,7 +24,7 @@ public class UserDb extends Database<User> implements Searchable<User, UserQuery
     }
 
     @Override
-    protected JsonType<Database<User>> type() {
+    public JsonType<Database<User>> type() {
         return JsonbInstance.instance.type(Types.newParameterizedType(Database.class, User.class));
     }
 

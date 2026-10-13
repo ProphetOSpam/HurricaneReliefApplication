@@ -14,29 +14,24 @@ import io.avaje.jsonb.JsonType;
 import io.avaje.jsonb.Jsonb;
 import io.avaje.jsonb.Types;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor
 public class Database<V> {
     @Getter(AccessLevel.PACKAGE)
     protected final Map<Key<V>, V> entries;
-    public JsonType<Database<V>> type;
-
-    protected JsonType<Database<V>> type() {
-        return null;
-    }
 
     public Database() {
-        entries = new HashMap<>();
-        type = type();
+        this(new HashMap<>());
     }
 
-    protected Database(Map<Key<V>, V> entries) {
-        this.entries = entries;
-        type = type();
+    public JsonType<Database<V>> type() {
+        return null;
     }
 
     public Key<V> create(V element) {
