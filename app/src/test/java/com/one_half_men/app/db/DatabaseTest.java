@@ -26,7 +26,7 @@ import io.avaje.jsonb.Types;
 
 public class DatabaseTest {
     @Test
-    public void databaseRoundtrip() throws IOException {
+    public void databaseRoundtripInMemory() throws IOException {
         UserDb db = new UserDb();
 
         User user = User.builder()
@@ -52,7 +52,6 @@ public class DatabaseTest {
 
         // Writing/Reading to file
         {
-
             DataWriter.writeDatabase(db);
             UserDb db3 = new UserDb(DataReader.readDatabase(db));
             assertEquals(db, db3);
