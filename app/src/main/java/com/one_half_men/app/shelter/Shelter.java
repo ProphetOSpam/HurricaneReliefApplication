@@ -1,5 +1,6 @@
 package com.one_half_men.app.shelter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.one_half_men.annotations.Query;
@@ -7,26 +8,20 @@ import com.one_half_men.app.being.Species;
 import com.one_half_men.app.location.Location;
 import com.one_half_men.app.user.User;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Query
+@AllArgsConstructor
 @Builder
+@Getter
+@Query
 public class Shelter {
-    private @Getter @Setter User owner;
-    private @Getter @Setter String name;
-    private @Getter @Setter Location location;
-    private @Getter @Setter Set<Resource> resources;
-    private @Getter @Setter Set<Accomodation> accomodations;
-    private @Getter @Setter Set<Species> allowedPets;
-
-    public Shelter(User owner, String name, Location location, Set<Resource> resources, Set<Accomodation> accomodations, Set<Species> allowedPets) {
-        this.owner = owner;
-        this.name = name;
-        this.location = location;
-        this.resources = resources;
-        this.accomodations = accomodations;
-        this.allowedPets = allowedPets;
-    }
+    private @Setter User owner;
+    private @Setter String name;
+    private @Setter Location location;
+    private @Builder.Default Set<Resource> resources = new HashSet<>();
+    private @Builder.Default Set<Accomodation> accomodations = new HashSet<>();
+    private @Builder.Default Set<Species> allowedPets = new HashSet<>();
 }

@@ -1,12 +1,10 @@
 package com.one_half_men.app.being;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+@AllArgsConstructor
+@Data
 public class Species {
-    private @Getter @Setter String value;
-
-    public Species(String value) {
-        this.value = value;
-    }
+    private String value;
 }
