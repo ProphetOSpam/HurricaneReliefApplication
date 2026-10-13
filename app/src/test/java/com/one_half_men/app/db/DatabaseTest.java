@@ -52,6 +52,7 @@ public class DatabaseTest {
 
         // Writing/Reading to file
         {
+
             DataWriter.writeDatabase(db);
             UserDb db3 = new UserDb(DataReader.readDatabase(db));
             assertEquals(db, db3);
