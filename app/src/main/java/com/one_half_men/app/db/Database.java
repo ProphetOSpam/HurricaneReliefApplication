@@ -82,7 +82,7 @@ public class Database<V> {
                 if (key == null) {
                     throw new JsonDataException("Map key is null at " + writer.path());
                 }
-                writer.name(key.toString());
+                writer.name(key.jsonKeyString());
                 valueAdapter.toJson(writer, entry.getValue());
             }
             writer.endObject();

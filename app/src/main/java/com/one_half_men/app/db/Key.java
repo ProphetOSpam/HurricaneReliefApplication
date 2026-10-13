@@ -22,8 +22,13 @@ public class Key<T> {
         return new Key<>(UUID.fromString(name));
     }
 
-    @Override
-    public String toString() {
+    /**
+     * This string is only used in json when this `Key` is acting as a json key.
+     * Necessary for avaje.
+     * 
+     * @see Database.DatabaseJsonAdapter
+     */
+    public String jsonKeyString() {
         return uuid.toString();
     }
 }
