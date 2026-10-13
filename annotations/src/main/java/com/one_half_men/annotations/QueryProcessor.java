@@ -13,9 +13,11 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
@@ -23,6 +25,7 @@ import com.google.auto.service.AutoService;
 import com.palantir.javapoet.AnnotationSpec;
 import com.palantir.javapoet.FieldSpec;
 import com.palantir.javapoet.JavaFile;
+import com.palantir.javapoet.MethodSpec;
 import com.palantir.javapoet.TypeName;
 import com.palantir.javapoet.TypeSpec;
 
@@ -81,17 +84,45 @@ public class QueryProcessor extends AbstractProcessor {
                     return fieldSpec;
                 });
 
+        Stream<String> qFields = element.getEnclosedElements().stream()
+                .filter(e -> e.getKind() == ElementKind.FIELD)
+                .map(qField -> {
+                    return qField.getSimpleName().toString();
+                });
+
         String queryClassName = element.getSimpleName() + QUERY_SUFFIX;
 
         AnnotationSpec generated = AnnotationSpec.builder(Generated.class)
                 .addMember("value", String.format("\"%s\"", getClass().getPackageName()))
                 .build();
 
+        ExecutableElement equals = ElementFilter
+        .methodsIn(elementUtils.getTypeElement(Object.class.getCanonicalName()).getEnclosedElements())
+        .stream().filter((e) -> e.getSimpleName().toString().equals("equals")).findFirst().get();
+
+        StringBuilder equalsCode = new StringBuilder();
+        equalsCode.append(String.format("if (arg0 instanceof %s type) {\n", element.getSimpleName()));
+        qFields.forEach(
+            s -> {
+                char[] text = s.toCharArray();
+                text[0] = Character.toUpperCase(text[0]);
+                equalsCode.append(String.format("\tif (%1$s.isPresent() && !%1$s.get().equals(type.get%2$s())) return false;\n", s, new String(text)));
+            }
+        );
+        equalsCode.append("\treturn true;\n");
+        equalsCode.append("} return false;");
+
+        MethodSpec newEquals = MethodSpec.overriding(equals)
+                    .addCode(equalsCode.toString())
+                    .build();
+
         TypeSpec classBuilder = TypeSpec.classBuilder(queryClassName)
                 .addModifiers(Modifier.PUBLIC)
                 .addFields((Iterable<FieldSpec>) fields::iterator)
                 .addAnnotation(generated)
-                .addAnnotation(Builder.class).build();
+                .addAnnotation(Builder.class)
+                .addMethod(newEquals)
+                .build();
 
         JavaFile javaFile = JavaFile.builder(pkg.toString(), classBuilder).build();
 
