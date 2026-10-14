@@ -1,16 +1,12 @@
 package com.one_half_men.app.location;
 
 import io.avaje.jsonb.Json;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Json
-@EqualsAndHashCode
+@AllArgsConstructor
+@Data
 public class ZipCode {
-    private @Getter @Setter String value;
-
-    public ZipCode(String value) {
-        this.value = value;
-    }
+    private String value;
 }

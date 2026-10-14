@@ -1,12 +1,15 @@
 package com.one_half_men.app.request;
 
 import io.avaje.jsonb.Json;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Json
 @Getter
 @Setter
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class CloseReason {
     private CloseReason.Type type;
     private String message;
@@ -14,11 +17,6 @@ public class CloseReason {
     public static enum Type {
         RESOLVED,
         RETRACTED;
-    }
-
-    CloseReason(CloseReason.Type type, String message) {
-        this.type = type;
-        this.message = message;
     }
 
     public static CloseReason resolved(String message) {
