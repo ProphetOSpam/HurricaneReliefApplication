@@ -1,32 +1,27 @@
 package com.one_half_men.app.db;
 
-import java.util.Map;
 import java.util.function.Consumer;
 
-import lombok.AccessLevel;
-import lombok.Getter;
+import io.avaje.jsonb.JsonType;
 
 public abstract class Database<V> {
-    @Getter(AccessLevel.PACKAGE)
-    protected final Map<Key<V>, V> entries;
+    BaseDatabase<V> base;
 
-    public Database(Map<Key<V>, V> entries) {
-        this.entries = entries;
-    }
+    public abstract JsonType<BaseDatabase<V>> type();
 
     public Key<V> create(V element) {
         Key<V> key = Key.random();
-        entries.put(key, element);
+        base.entries.put(key, element);
 
         return key;
     }
 
     public V get(Key<V> key) {
-        return entries.get(key);
+        return base.entries.get(key);
     }
 
     public V remove(Key<V> key) {
-        return entries.remove(key);
+        return base.entries.remove(key);
     }
 
     // TODO: figure out how we wanna handle nulls

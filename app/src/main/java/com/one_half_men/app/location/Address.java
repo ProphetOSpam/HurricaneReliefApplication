@@ -7,6 +7,9 @@ import com.one_half_men.app.distance.Distance;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import io.avaje.jsonb.Json;
+
+@Json
 @AllArgsConstructor
 @Data
 public class Address implements Location {

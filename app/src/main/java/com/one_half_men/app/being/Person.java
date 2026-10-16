@@ -3,12 +3,15 @@ package com.one_half_men.app.being;
 import java.util.Date;
 import java.util.List;
 
+import io.avaje.jsonb.Json;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Json
 @EqualsAndHashCode(callSuper = true)
 public class Person extends Being {
     private PhoneNumber phoneNumber;
