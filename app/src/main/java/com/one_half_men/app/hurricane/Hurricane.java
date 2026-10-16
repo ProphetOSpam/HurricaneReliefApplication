@@ -11,12 +11,14 @@ import io.avaje.jsonb.Json;
 
 import com.one_half_men.annotations.Query;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Json
 @Query
+@AllArgsConstructor
 @Builder
 public class Hurricane {
     private @Getter @Setter String name;

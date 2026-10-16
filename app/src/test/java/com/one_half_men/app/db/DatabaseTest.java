@@ -3,6 +3,8 @@ package com.one_half_men.app.db;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -16,13 +18,9 @@ import com.one_half_men.app.being.PhoneNumber;
 import com.one_half_men.app.being.Species;
 import com.one_half_men.app.json.DataReader;
 import com.one_half_men.app.json.DataWriter;
-import com.one_half_men.app.json.JsonbInstance;
 import com.one_half_men.app.location.Coordinates;
 import com.one_half_men.app.user.Role;
 import com.one_half_men.app.user.User;
-
-import io.avaje.jsonb.JsonType;
-import io.avaje.jsonb.Types;
 
 public class DatabaseTest {
     @Test
@@ -40,21 +38,18 @@ public class DatabaseTest {
 
         db.create(user);
 
-        JsonType<Database<User>> type = JsonbInstance.instance
-                .type(Types.newParameterizedType(Database.class, User.class));
-
         // In memory testing
         {
-            String str = type.toJson(db);
-            UserDb db2 = new UserDb(type.fromJson(str));
+            StringWriter str = new StringWriter();
+            DataWriter.writeDatabase(UserDb.type(), db, str);
+            UserDb db2 = DataReader.readDatabase(UserDb.type(), UserDb::new, new StringReader(str.toString()));
             assertEquals(db, db2);
         }
 
         // Writing/Reading to file
         {
-
-            DataWriter.writeDatabase(db);
-            UserDb db3 = new UserDb(DataReader.readDatabase(db));
+            DataWriter.writeDatabase(UserDb.type(), db);
+            UserDb db3 = DataReader.readDatabase(UserDb.type(), UserDb::new);
             assertEquals(db, db3);
         }
     }

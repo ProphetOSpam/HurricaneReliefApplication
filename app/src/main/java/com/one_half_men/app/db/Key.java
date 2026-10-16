@@ -26,7 +26,7 @@ public class Key<T> {
      * This string is only used in json when this `Key` is acting as a json key.
      * Necessary for avaje.
      * 
-     * @see Database.DatabaseJsonAdapter
+     * @see Database.BaseDatabaseJsonAdapter
      */
     public String jsonKeyString() {
         return uuid.toString();
