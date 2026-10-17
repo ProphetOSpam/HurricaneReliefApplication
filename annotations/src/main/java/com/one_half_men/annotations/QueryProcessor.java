@@ -79,6 +79,8 @@ public class QueryProcessor extends AbstractProcessor {
 
                     FieldSpec fieldSpec = FieldSpec
                             .builder(optionalFieldType, field.getSimpleName().toString(), Modifier.PUBLIC)
+                            .addAnnotation(lombok.Builder.Default.class)
+                            .initializer("Optional.empty()")
                             .build();
 
                     return fieldSpec;
