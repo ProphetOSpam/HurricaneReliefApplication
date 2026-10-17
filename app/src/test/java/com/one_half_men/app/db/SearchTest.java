@@ -32,8 +32,8 @@ public class SearchTest {
                 .build();
 
         User user1 = User.builder()
-                .person(new Person("secondName","lastName",Date.from(Instant.now()),List.of(),
-                        new PhoneNumber("1","234","8675309")))
+                .person(new Person("secondName", "lastName", Date.from(Instant.now()), List.of(),
+                        new PhoneNumber("1", "234", "8675309")))
                 .role(Role.CITIZEN)
                 .location(new Coordinates(25.0,50.0))
                 .build();
@@ -43,9 +43,10 @@ public class SearchTest {
 
         UserQuery userQ = UserQuery.builder()
                 .role(Optional.of(Role.CITIZEN))
+                .location(Optional.of(new Coordinates(25.0,50.0)))
                 .build();
 
         Set<Key<User>> set = db.search(userQ);
-        System.out.println(set.toArray()[0]);
+        Key<User> firstInSet = (Key<User>) set.toArray()[0];
     }
 }

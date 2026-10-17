@@ -24,6 +24,13 @@ public class ShelterDb extends Database<Shelter> implements Searchable<Shelter, 
 
 	@Override
 	public Set<Key<Shelter>> search(ShelterQuery query) {
-		return Set.of();
+		Set<Key<Shelter>> result = new HashSet<Key<Shelter>>();
+        for (Key<Shelter> key : entries.keySet()) {
+            Shelter shelter = entries.get(key);
+            if (query.equals(shelter)) {
+                result.add(key);
+            }
+        }
+        return result;
 	}
 }

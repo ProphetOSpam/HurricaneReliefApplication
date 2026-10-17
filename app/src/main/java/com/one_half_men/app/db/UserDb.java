@@ -26,9 +26,9 @@ public class UserDb extends Database<User> implements Searchable<User, UserQuery
     }
 
     public Set<Key<User>> search(UserQuery query) {
-        Set<Key<User>> result = Set.of();
-        for (Key<User> key : base.entries.keySet()) {
-            User user = base.entries.get(key);
+        Set<Key<User>> result = new HashSet<Key<User>>();
+        for (Key<User> key : entries.keySet()) {
+            User user = entries.get(key);
             if (query.equals(user)) {
                 result.add(key);
             }
