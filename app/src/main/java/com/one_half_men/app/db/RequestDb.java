@@ -11,6 +11,13 @@ public class RequestDb {
 //
 // 	@Override
 // 	public Set<Key<Request>> search(RequestQuery query) {
-// 		return Set.of();
+// 		Set<Key<Request>> result = new HashSet<Key<Request>>();
+//          for (Key<Request> key : entries.keySet()) {
+//              Request request = entries.get(key);
+//              if (query.equals(request)) {
+//                  result.add(key);
+//              }
+//          }
+//      return result;
 // 	}
 // }

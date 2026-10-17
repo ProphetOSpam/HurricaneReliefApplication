@@ -1,5 +1,6 @@
 package com.one_half_men.app.db;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class UserDb extends Database<User> implements Searchable<User, UserQuery
     }
 
     public Set<Key<User>> search(UserQuery query) {
-        Set<Key<User>> result = Set.of();
+        Set<Key<User>> result = new HashSet<Key<User>>();
         for (Key<User> key : entries.keySet()) {
             User user = entries.get(key);
             if (query.equals(user)) {
