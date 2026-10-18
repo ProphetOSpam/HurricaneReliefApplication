@@ -24,6 +24,9 @@ import lombok.Setter;
 @Builder
 @Getter
 public class User {
+    private String username;
+    private Authentication.Key login;
+
     private @Setter Person person;
     private @Setter Role role;
     private @Setter Location location;
