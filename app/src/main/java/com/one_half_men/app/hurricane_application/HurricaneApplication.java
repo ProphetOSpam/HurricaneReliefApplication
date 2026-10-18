@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 
 import com.one_half_men.app.being.Being;
 import com.one_half_men.app.db.Key;
+import com.one_half_men.app.db.UserDb;
 import com.one_half_men.app.error.AccountCreationError;
 import com.one_half_men.app.error.AccountLoginError;
 import com.one_half_men.app.error.PermissionsError;
@@ -19,6 +20,7 @@ import com.one_half_men.app.request.Request;
 import com.one_half_men.app.request.RequestQuery;
 import com.one_half_men.app.shelter.Shelter;
 import com.one_half_men.app.shelter.ShelterQuery;
+import com.one_half_men.app.user.Authentication;
 import com.one_half_men.app.user.User;
 import com.one_half_men.app.user.UserQuery;
 
@@ -34,11 +36,50 @@ public class HurricaneApplication {
     }
 
     public Key<User> createAccount(String username, String password) throws AccountCreationError {
-        return null;
+        UserDb db = new UserDb();
+
+        boolean usernameTaken = db.search(
+                UserQuery.builder()
+                        .username(Optional.of(username))
+                        .build())
+                .size() > 0;
+
+        if (usernameTaken)
+            throw new AccountCreationError.UsernameTaken();
+
+        User.UserBuilder builder = User.builder().username(username);
+
+        Optional<Authentication.Key> login = Authentication.Key.fromPassword(password);
+        if (login.isEmpty())
+            throw new AccountCreationError.PasswordInvalid();
+
+        builder.login(login.get());
+
+        return db.create(builder.build());
     }
 
     public User login(String username, String password) throws AccountLoginError {
-        return null;
+        UserDb db = new UserDb();
+
+        Set<Key<User>> results = db.search(
+                UserQuery.builder()
+                        .username(Optional.of(username))
+                        .build());
+
+        Optional<Key<User>> first = results.stream().findFirst();
+        if (first.isEmpty())
+            throw new AccountLoginError.NoAccountFoundError();
+
+        Key<User> key = first.get();
+        User user = db.get(key);
+
+        boolean passwordCorrect = user.getLogin().checkPassword(password);
+
+        if (!passwordCorrect)
+            throw new AccountLoginError.WrongPasswordError();
+
+        loggedInUser = Optional.of(user);
+        return user;
     }
 
     public void logout() {
