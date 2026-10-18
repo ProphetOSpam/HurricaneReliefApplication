@@ -6,9 +6,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Optional;
 
 import com.one_half_men.app.hurricane_application.HurricaneApplication;
 
+import io.avaje.jsonb.Json;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -49,6 +51,8 @@ public class Authentication {
 
     // TODO: consider replacing with a more robust, secure solution
     @AllArgsConstructor
+    @Getter
+    @Json
     public static class Key {
         /** 128-bit salt */
         private final byte[] salt;
@@ -67,12 +71,16 @@ public class Authentication {
         };
 
         /**
-         * Creates a new instance with a random salt,
-         * does not do any password validation
+         * Creates a new instance with a random salt.
          *
          * @param password The password to use for hashing
+         *
+         * @return New key, empty if passsword in invalid
          */
-        public static Authentication.Key fromPassword(String password) {
+        public static Optional<Authentication.Key> fromPassword(String password) {
+            if (!Password.isValid(password))
+                return Optional.empty();
+
             byte[] salt = new byte[16];
             HurricaneApplication.RANDOM.nextBytes(salt);
 
@@ -81,7 +89,7 @@ public class Authentication {
 
             byte[] hash = DIGEST.digest();
 
-            return new Authentication.Key(salt, hash);
+            return Optional.of(new Authentication.Key(salt, hash));
         }
 
         /**
