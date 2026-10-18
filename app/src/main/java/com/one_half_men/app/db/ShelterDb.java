@@ -1,5 +1,6 @@
 package com.one_half_men.app.db;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.one_half_men.app.json.JsonbInstance;
@@ -25,8 +26,8 @@ public class ShelterDb extends Database<Shelter> implements Searchable<Shelter, 
 	@Override
 	public Set<Key<Shelter>> search(ShelterQuery query) {
 		Set<Key<Shelter>> result = new HashSet<Key<Shelter>>();
-        for (Key<Shelter> key : entries.keySet()) {
-            Shelter shelter = entries.get(key);
+        for (Key<Shelter> key : base.entries.keySet()) {
+            Shelter shelter = base.entries.get(key);
             if (query.equals(shelter)) {
                 result.add(key);
             }

@@ -47,6 +47,6 @@ public class SearchTest {
                 .build();
 
         Set<Key<User>> set = db.search(userQ);
-        Key<User> firstInSet = (Key<User>) set.toArray()[0];
+        Key<User> firstInSet =  set.stream().findFirst().get();
     }
 }
