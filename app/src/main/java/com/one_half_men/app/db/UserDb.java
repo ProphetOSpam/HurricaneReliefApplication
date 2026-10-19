@@ -30,7 +30,7 @@ public class UserDb extends Database<User> implements Searchable<User, UserQuery
         Set<Key<User>> result = new HashSet<Key<User>>();
         for (Key<User> key : base.entries.keySet()) {
             User user = base.entries.get(key);
-            if (query.equals(user)) {
+            if (query.matches(user)) {
                 result.add(key);
             }
         }
