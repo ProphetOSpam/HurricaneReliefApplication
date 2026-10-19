@@ -1,5 +1,7 @@
 package com.one_half_men.app.db;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +24,7 @@ public class SearchTest {
     public void databaseSearchViaQuery() {
         UserDb db = new UserDb();
 
-        User user = User.builder()
+        User user1 = User.builder()
                 .person(new Person("firstName", "lastName", Date.from(Instant.now()), List.of(),
                         new PhoneNumber("1", "234", "5678910")))
                 .role(Role.CITIZEN)
@@ -31,22 +33,33 @@ public class SearchTest {
                         .of(new Animal("Bob", "Barker", new Date(2012, 1, 1), List.of(), new Species("Dog"))))
                 .build();
 
-        User user1 = User.builder()
+        User user2 = User.builder()
                 .person(new Person("secondName", "lastName", Date.from(Instant.now()), List.of(),
                         new PhoneNumber("1", "234", "8675309")))
                 .role(Role.CITIZEN)
-                .location(new Coordinates(25.0,50.0))
+                .location(new Coordinates(25.0, 50.0))
                 .build();
 
-        db.create(user);
-        db.create(user1);
+        Key<User> key1 = db.create(user1);
+        Key<User> key2 = db.create(user2);
 
-        UserQuery userQ = UserQuery.builder()
-                .role(Optional.of(Role.CITIZEN))
-                .location(Optional.of(new Coordinates(25.0,50.0)))
-                .build();
+        {
+            UserQuery userQ = UserQuery.builder()
+                    .role(Optional.of(Role.CITIZEN))
+                    .location(Optional.of(new Coordinates(25.0, 50.0)))
+                    .build();
 
-        Set<Key<User>> set = db.search(userQ);
-        Key<User> firstInSet =  set.stream().findFirst().get();
+            Set<Key<User>> set = db.search(userQ);
+            assertEquals(set, Set.of(key2));
+        }
+
+        {
+            UserQuery userQ = UserQuery.builder()
+                    .role(Optional.of(Role.CITIZEN))
+                    .build();
+
+            Set<Key<User>> set = db.search(userQ);
+            assertEquals(set, Set.of(key1, key2));
+        }
     }
 }
