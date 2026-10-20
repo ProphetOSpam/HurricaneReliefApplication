@@ -23,6 +23,7 @@ import com.one_half_men.app.shelter.ShelterQuery;
 import com.one_half_men.app.user.Authentication;
 import com.one_half_men.app.user.User;
 import com.one_half_men.app.user.UserQuery;
+import com.one_half_men.app.user.Authentication.Username;
 
 public class HurricaneApplication {
     public static final Random RANDOM = new SecureRandom();
@@ -46,6 +47,9 @@ public class HurricaneApplication {
 
         if (usernameTaken)
             throw new AccountCreationError.UsernameTaken();
+
+        if (!Username.isValid(username))
+            throw new AccountCreationError.UsernameInvalid();
 
         User.UserBuilder builder = User.builder().username(username);
 
