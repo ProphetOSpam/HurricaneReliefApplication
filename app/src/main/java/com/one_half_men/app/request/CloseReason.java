@@ -20,10 +20,10 @@ public class CloseReason {
     }
 
     public static CloseReason resolved(String message) {
-        return null;
+        return new CloseReason(Type.RESOLVED, message);
     }
 
     public static CloseReason retracted(String message) {
-        return null;
+        return new CloseReason(Type.RETRACTED, message);
     }
 }

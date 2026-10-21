@@ -1,5 +1,6 @@
 package com.one_half_men.app.request;
 
+import java.net.Authenticator;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
@@ -22,31 +23,41 @@ import lombok.Setter;
 @Builder
 public class Request {
     private @Setter User author;
-    private @Setter Optional<User> owner;
+    private @Setter @Builder.Default Optional<User> owner = Optional.empty();
+    private boolean proxy;
     private Set<User> participants;
     private @Setter Date date;
-    private @Setter Optional<CloseReason> closeReason;
+    private @Setter @Builder.Default Optional<CloseReason> closeReason = Optional.empty();
     private @Setter Location location;
     private @Setter String description;
     private Set<Being> beings;
 
-    public boolean addParticipant(User user) {
-        return false;
+    public User getOwner() {
+        if (owner.isPresent()) return owner.get();
+        return author;
     }
 
-    public void claimProxy(User user) {
+    public boolean addParticipant(User user) {
+        return participants.add(user);
+    }
 
+    /**
+     * Claims the Request under an Owner if not claimed
+     * 
+     * @param user User claiming request as owner
+     * @return If operation succeeded (no previous owner)
+     */
+    public boolean claimProxy(User user) {
+        if (owner.isPresent() || !isProxy()) return false;
+        owner = Optional.of(user);
+        return true;
     }
 
     public void close(CloseReason reason) {
-
-    }
-
-    public boolean isProxy() {
-        return false;
+        closeReason = Optional.of(reason);
     }
 
     public boolean isClosed() {
-        return false;
+        return closeReason.isPresent();
     }
 }
