@@ -1,5 +1,6 @@
 package com.one_half_men.annotations;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -56,7 +57,7 @@ public class QueryProcessor extends AbstractProcessor {
 
             try {
                 generateClass(element);
-            } catch (Exception e) {
+            } catch (IOException e) {
                 error(e.getMessage(), element);
             }
         }
@@ -64,7 +65,7 @@ public class QueryProcessor extends AbstractProcessor {
         return false;
     }
 
-    private void generateClass(Element element) throws Exception {
+    private void generateClass(Element element) throws IOException {
         Types typeUtils = processingEnv.getTypeUtils();
         Elements elementUtils = processingEnv.getElementUtils();
 
