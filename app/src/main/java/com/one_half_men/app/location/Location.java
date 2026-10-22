@@ -9,4 +9,6 @@ import io.avaje.jsonb.Json;
 @Json.SubType(type = Coordinates.class)
 public interface Location {
     public Distance distanceTo(Location other);
+    
+    public State getState();
 }

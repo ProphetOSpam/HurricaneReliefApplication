@@ -22,4 +22,9 @@ public class Coordinates implements Location {
     public Distance distanceTo(Location other) {
         return null;
     }
+
+    @Override
+    public State getState() {
+        return null;
+    }
 }

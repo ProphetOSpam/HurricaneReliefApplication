@@ -27,4 +27,9 @@ public class Address implements Location {
     public Distance distanceTo(Location other) {
         return null;
     }
+
+    @Override
+    public State getState() {
+        return state;
+    }
 }
