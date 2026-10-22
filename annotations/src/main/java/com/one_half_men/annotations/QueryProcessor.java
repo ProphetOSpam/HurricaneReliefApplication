@@ -54,7 +54,7 @@ public class QueryProcessor extends AbstractProcessor {
                     error("Query can only apply to classes, records, and enums", element);
                     return false;
             }
-
+            
             try {
                 generateClass(element);
             } catch (IOException e) {
@@ -128,9 +128,10 @@ public class QueryProcessor extends AbstractProcessor {
                 .addFields((Iterable<FieldSpec>) fields::iterator)
                 .addAnnotation(generated)
                 .addAnnotation(Builder.class)
+                .addSuperinterface(typeUtils.getDeclaredType(elementUtils.getTypeElement(IQuery.class.getCanonicalName()), element.asType()))
                 .addMethod(matches)
                 .build();
-
+            
         JavaFile javaFile = JavaFile.builder(pkg.toString(), classBuilder).build();
 
         javaFile.writeTo(processingEnv.getFiler());

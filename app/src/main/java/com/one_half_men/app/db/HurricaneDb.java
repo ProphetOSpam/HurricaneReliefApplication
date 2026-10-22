@@ -1,10 +1,8 @@
 package com.one_half_men.app.db;
 
 import java.io.File;
-import java.util.Set;
 
 import com.one_half_men.app.hurricane.Hurricane;
-import com.one_half_men.app.hurricane.HurricaneQuery;
 import com.one_half_men.app.json.Constants;
 import com.one_half_men.app.json.DataReader;
 import com.one_half_men.app.json.JsonbInstance;
@@ -17,7 +15,7 @@ import lombok.EqualsAndHashCode;
 
 @Json
 @EqualsAndHashCode(callSuper = true)
-public class HurricaneDb extends Database<Hurricane> implements Searchable<Hurricane, HurricaneQuery> {
+public class HurricaneDb extends Database<Hurricane> {
 	public HurricaneDb(BaseDatabase<Hurricane> base) {
 		super(base);
 	}
@@ -27,10 +25,5 @@ public class HurricaneDb extends Database<Hurricane> implements Searchable<Hurri
 
 	public static JsonType<BaseDatabase<Hurricane>> type() {
 		return JsonbInstance.instance.type(Types.newParameterizedType(Database.class, Request.class));
-	}
-
-	@Override
-	public Set<Key<Hurricane>> search(HurricaneQuery query) {
-		return Set.of();
 	}
 }

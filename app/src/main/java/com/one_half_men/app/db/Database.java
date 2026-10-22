@@ -1,11 +1,15 @@
 package com.one_half_men.app.db;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
+
+import com.one_half_men.annotations.IQuery;
 
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
-public abstract class Database<V> {
+public abstract class Database<V> implements Searchable<V, IQuery<V>> {
     public BaseDatabase<V> base;
 
     Database() {
@@ -35,5 +39,17 @@ public abstract class Database<V> {
     public void edit(Key<V> key, Consumer<V> consumer) {
         V element = get(key);
         consumer.accept(element);
+    }
+
+    @Override
+    public Set<Key<V>> search(IQuery<V> query) {
+        Set<Key<V>> result = new HashSet<Key<V>>();
+        for (Key<V> key : base.entries.keySet()) {
+            V user = base.entries.get(key);
+            if (query.matches(user)) {
+                result.add(key);
+            }
+        }
+        return result;
     }
 }
