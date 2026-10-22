@@ -36,9 +36,12 @@ public class HurricaneApplication {
         return INSTANCE;
     }
 
-    public Key<User> createAccount(String username, String password) throws AccountCreationError {
-        UserDb db = new UserDb();
+    // Dependency injection for testing
+    // TODO: figure out a better way to do this. The databases are required to be
+    // singletons, but we also need different ones for testing; these aren't
+    // compatible.
 
+    public Key<User> createAccount(String username, String password, UserDb db) throws AccountCreationError {
         boolean usernameTaken = db.search(
                 UserQuery.builder()
                         .username(Optional.of(username))
@@ -62,9 +65,7 @@ public class HurricaneApplication {
         return db.create(builder.build());
     }
 
-    public User login(String username, String password) throws AccountLoginError {
-        UserDb db = new UserDb();
-
+    public User login(String username, String password, UserDb db) throws AccountLoginError {
         Set<Key<User>> results = db.search(
                 UserQuery.builder()
                         .username(Optional.of(username))
