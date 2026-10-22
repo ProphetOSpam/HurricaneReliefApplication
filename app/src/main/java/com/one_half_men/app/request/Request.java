@@ -24,7 +24,7 @@ import lombok.Setter;
 public class Request {
     private @Setter User author;
     private @Setter @Builder.Default Optional<User> owner = Optional.empty();
-    private boolean proxy;
+    private Boolean proxy;
     private Set<User> participants;
     private @Setter Date date;
     private @Setter @Builder.Default Optional<CloseReason> closeReason = Optional.empty();
@@ -32,9 +32,8 @@ public class Request {
     private @Setter String description;
     private Set<Being> beings;
 
-    public User getOwner() {
-        if (owner.isPresent()) return owner.get();
-        return author;
+    public User getEditor() {
+        return owner.isPresent() ? owner.get() : author;
     }
 
     public boolean addParticipant(User user) {
@@ -48,7 +47,7 @@ public class Request {
      * @return If operation succeeded (no previous owner)
      */
     public boolean claimProxy(User user) {
-        if (owner.isPresent() || !isProxy()) return false;
+        if (owner.isPresent() || !getProxy()) return false;
         owner = Optional.of(user);
         return true;
     }
