@@ -2,8 +2,7 @@ package com.one_half_men.app.db;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -25,16 +24,16 @@ public class SearchTest {
         UserDb db = new UserDb();
 
         User user1 = User.builder()
-                .person(new Person("firstName", "lastName", Date.from(Instant.now()), List.of(),
+                .person(new Person("firstName", "lastName", LocalDate.now(), List.of(),
                         new PhoneNumber("1", "234", "5678910")))
                 .role(Role.CITIZEN)
                 .location(new Coordinates(0.0, 0.0))
                 .family(Set
-                        .of(new Animal("Bob", "Barker", new Date(2012, 1, 1), List.of(), new Species("Dog"))))
+                        .of(new Animal("Bob", "Barker", LocalDate.of(2012, 1, 1), List.of(), new Species("Dog"))))
                 .build();
 
         User user2 = User.builder()
-                .person(new Person("secondName", "lastName", Date.from(Instant.now()), List.of(),
+                .person(new Person("secondName", "lastName", LocalDate.now(), List.of(),
                         new PhoneNumber("1", "234", "8675309")))
                 .role(Role.CITIZEN)
                 .location(new Coordinates(25.0, 50.0))

@@ -5,8 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -28,12 +27,12 @@ public class DatabaseTest {
         UserDb db = new UserDb();
 
         User user = User.builder()
-                .person(new Person("firstName", "lastName", Date.from(Instant.now()), List.of(),
+                .person(new Person("firstName", "lastName", LocalDate.now(), List.of(),
                         new PhoneNumber("1", "234", "5678910")))
                 .role(Role.CITIZEN)
                 .location(new Coordinates(0.0, 0.0))
                 .family(Set
-                        .of(new Animal("Bob", "Barker", new Date(2012, 1, 1), List.of(), new Species("Dog"))))
+                        .of(new Animal("Bob", "Barker", LocalDate.of(2012, 1, 1), List.of(), new Species("Dog"))))
                 .build();
 
         db.create(user);

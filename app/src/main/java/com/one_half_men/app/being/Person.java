@@ -1,10 +1,9 @@
 package com.one_half_men.app.being;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import io.avaje.jsonb.Json;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +18,7 @@ public class Person extends Being {
     public Person(
             String firstName,
             String lastName,
-            Date birthDate,
+            LocalDate birthDate,
             List<SpecialNeed> specialNeeds,
             PhoneNumber phoneNumber) {
         super(firstName, lastName, birthDate, specialNeeds);

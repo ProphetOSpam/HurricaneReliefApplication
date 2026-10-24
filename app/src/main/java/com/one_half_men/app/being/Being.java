@@ -1,6 +1,6 @@
 package com.one_half_men.app.being;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import io.avaje.jsonb.Json;
@@ -18,6 +18,6 @@ import lombok.Setter;
 public abstract class Being {
     private String firstName;
     private String lastName;
-    private Date birthDate;
+    private LocalDate birthDate;
     private @Setter List<SpecialNeed> specialNeeds;
 }
