@@ -2,6 +2,7 @@ package com.one_half_men.app;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.one_half_men.app.db.UserDb;
@@ -14,7 +15,8 @@ import com.one_half_men.app.user.User;
 public class ApplicationLoginTest {
     static UserDb db = new UserDb();
 
-    static {
+    @BeforeAll
+    static void setup() {
         db.create(User.builder()
                 .username("Bob")
                 .login(Authentication.Key.fromPassword("0123456789").get())
