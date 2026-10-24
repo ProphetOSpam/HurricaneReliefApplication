@@ -27,6 +27,7 @@ public class Hurricane {
     private @Getter Set<State> affectedAreas;
 
     public boolean isAffected(Location location) {
+        if (affectedAreas.contains(location.getState())) return true;
         return false;
     }
 }
