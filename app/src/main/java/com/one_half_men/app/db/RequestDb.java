@@ -15,6 +15,10 @@ import lombok.EqualsAndHashCode;
 @Json
 @EqualsAndHashCode(callSuper = true)
 public class RequestDb extends Database<Request> {
+    public RequestDb() {
+        super();
+    }
+
     public RequestDb(BaseDatabase<Request> base) {
         super(base);
     }
