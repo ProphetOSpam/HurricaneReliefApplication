@@ -22,7 +22,15 @@ public class UserDb extends Database<User> {
         super(base);
     }
 
-    public static final UserDb instance = DataReader.readDatabase(type(), UserDb::new, new File(Constants.USER_DB));
+    private static UserDb instance;
+
+    public UserDb getInstance() {
+        if (instance == null) {
+            instance = DataReader.readDatabase(type(), UserDb::new, new File(Constants.USER_DB));
+        }
+
+        return instance;
+    }
 
     public static JsonType<BaseDatabase<User>> type() {
         return JsonbInstance.instance.type(Types.newParameterizedType(BaseDatabase.class, User.class));

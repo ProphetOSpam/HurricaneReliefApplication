@@ -19,8 +19,15 @@ public class ShelterDb extends Database<Shelter> {
         super(base);
     }
 
-    public static final ShelterDb instance = DataReader.readDatabase(type(), ShelterDb::new,
-            new File(Constants.SHELTER_DB));
+    private static ShelterDb instance;
+
+    public ShelterDb getInstance() {
+        if (instance == null) {
+            instance = DataReader.readDatabase(type(), ShelterDb::new, new File(Constants.SHELTER_DB));
+        }
+
+        return instance;
+    }
 
     public static JsonType<BaseDatabase<Shelter>> type() {
         return JsonbInstance.instance.type(Types.newParameterizedType(Database.class, Shelter.class));

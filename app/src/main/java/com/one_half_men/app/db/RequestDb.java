@@ -23,8 +23,15 @@ public class RequestDb extends Database<Request> {
         super(base);
     }
 
-    public static final RequestDb instance = DataReader.readDatabase(type(), RequestDb::new,
-            new File(Constants.SHELTER_DB));
+    private static RequestDb instance;
+
+    public RequestDb getInstance() {
+        if (instance == null) {
+            instance = DataReader.readDatabase(type(), RequestDb::new, new File(Constants.SHELTER_DB));
+        }
+
+        return instance;
+    }
 
     public static JsonType<BaseDatabase<Request>> type() {
         return JsonbInstance.instance.type(Types.newParameterizedType(Database.class, Request.class));

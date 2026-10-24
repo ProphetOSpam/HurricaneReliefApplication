@@ -20,8 +20,15 @@ public class HurricaneDb extends Database<Hurricane> {
 		super(base);
 	}
 
-	public static final HurricaneDb instance = DataReader.readDatabase(type(), HurricaneDb::new,
-			new File(Constants.SHELTER_DB));
+	private static HurricaneDb instance;
+
+	public HurricaneDb getInstance() {
+		if (instance == null) {
+			instance = DataReader.readDatabase(type(), HurricaneDb::new, new File(Constants.SHELTER_DB));
+		}
+
+		return instance;
+	}
 
 	public static JsonType<BaseDatabase<Hurricane>> type() {
 		return JsonbInstance.instance.type(Types.newParameterizedType(Database.class, Request.class));
