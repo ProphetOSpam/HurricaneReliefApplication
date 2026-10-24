@@ -1,7 +1,7 @@
 package com.one_half_men.app.request;
 
-import java.net.Authenticator;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -24,13 +24,13 @@ import lombok.Setter;
 public class Request {
     private @Setter User author;
     private @Setter @Builder.Default Optional<User> owner = Optional.empty();
-    private Boolean proxy;
-    private Set<User> participants;
-    private @Setter Date date;
+    private @Builder.Default Boolean proxy = false;
+    private @Builder.Default Set<User> participants = new HashSet<>();
+    private @Setter LocalDate date;
     private @Setter @Builder.Default Optional<CloseReason> closeReason = Optional.empty();
     private @Setter Location location;
     private @Setter String description;
-    private Set<Being> beings;
+    private @Builder.Default Set<Being> beings = new HashSet<>();
 
     public User getEditor() {
         return owner.isPresent() ? owner.get() : author;
