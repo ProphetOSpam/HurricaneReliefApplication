@@ -25,35 +25,35 @@ public class ApplicationLoginTest {
 
     @Test
     void createAccount() throws AccountCreationError {
-        HurricaneApplication.getInstance().createAccount("Alice", "0123456789", db);
+        HurricaneApplication.getInstance().createAccount(db, "Alice", "0123456789");
     }
 
     @Test
     void failCreateAccount() {
         assertThrows(AccountCreationError.PasswordInvalid.class, () -> {
-            HurricaneApplication.getInstance().createAccount("Clara", "", db);
+            HurricaneApplication.getInstance().createAccount(db, "Clara", "");
         });
 
         assertThrows(AccountCreationError.UsernameInvalid.class, () -> {
-            HurricaneApplication.getInstance().createAccount("", "0123456789", db);
+            HurricaneApplication.getInstance().createAccount(db, "", "0123456789");
         });
 
         assertThrows(AccountCreationError.UsernameTaken.class, () -> {
-            HurricaneApplication.getInstance().createAccount("Bob", "0123456789", db);
+            HurricaneApplication.getInstance().createAccount(db, "Bob", "0123456789");
         });
     }
 
     @Test
     void login() throws AccountLoginError {
-        HurricaneApplication.getInstance().login("Bob", "0123456789", db);
+        HurricaneApplication.getInstance().login(db, "Bob", "0123456789");
     }
 
     @Test
     void loginWrongCredentials() {
         assertThrows(AccountLoginError.NoAccountFoundError.class,
-                () -> HurricaneApplication.getInstance().login("", "", db));
+                () -> HurricaneApplication.getInstance().login(db, "", ""));
 
         assertThrows(AccountLoginError.WrongPasswordError.class,
-                () -> HurricaneApplication.getInstance().login("Bob", "", db));
+                () -> HurricaneApplication.getInstance().login(db, "Bob", ""));
     }
 }

@@ -42,9 +42,9 @@ public class HurricaneScarlettScenarios {
     @Order(0)
     void createTheReliefRequest() throws AccountCreationError {
         dellKey = HurricaneApplication.getInstance().createAccount(
+                USER_DB,
                 DELL_USER,
-                "password",
-                USER_DB);
+                "password");
 
         // Sophie's Father
         User dell = USER_DB.get(dellKey);
