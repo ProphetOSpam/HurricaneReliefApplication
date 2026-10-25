@@ -27,4 +27,9 @@ public class Coordinates implements Location {
             return Optional.empty();
         }
     }
+
+	@Override
+    public String toText() {
+        return String.format("(%f, %f)", latitude, longitude);
+	}
 }

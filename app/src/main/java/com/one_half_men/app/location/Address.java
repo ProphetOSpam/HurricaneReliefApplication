@@ -32,6 +32,7 @@ public class Address implements Location {
         return Optional.of(state);
     }
 
+    @Override
     public String toText() {
         return String.format("%s, %s, %s %s", streetAddress, city, state.getAbbreviation(), zipCode.get().getValue());
     }
