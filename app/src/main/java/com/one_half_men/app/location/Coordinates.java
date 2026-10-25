@@ -1,5 +1,8 @@
 package com.one_half_men.app.location;
 
+import java.io.IOException;
+import java.util.Optional;
+
 import com.one_half_men.app.distance.Distance;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +27,11 @@ public class Coordinates implements Location {
     }
 
     @Override
-    public State getState() {
-        return null;
+    public Optional<State> estimateState() {
+        try {
+            return MapTools.estimateState(this);
+        } catch (IOException | InterruptedException e) {
+            return Optional.empty();
+        }
     }
 }

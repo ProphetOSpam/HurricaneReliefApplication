@@ -1,5 +1,6 @@
 package com.one_half_men.app.location;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import com.one_half_men.app.distance.Distance;
@@ -20,8 +21,8 @@ public class Address implements Location {
     private State state;
     private Optional<ZipCode> zipCode;
 
-    public Coordinates estimateCoordinates() {
-        return null;
+    public Coordinates estimateCoordinates() throws IOException, InterruptedException {
+        return MapTools.estimateCoordinates(this);
     }
 
     @Override
@@ -30,7 +31,11 @@ public class Address implements Location {
     }
 
     @Override
-    public State getState() {
-        return state;
+    public Optional<State> estimateState() {
+        return Optional.of(state);
+    }
+
+    public String toText() {
+        return String.format("%s, %s, %s %s", streetAddress, city, state.getAbbreviation(), zipCode.get().getValue());
     }
 }

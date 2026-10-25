@@ -4,13 +4,11 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
 
+import com.one_half_men.annotations.Query;
 import com.one_half_men.app.location.Location;
 import com.one_half_men.app.location.State;
 
 import io.avaje.jsonb.Json;
-
-import com.one_half_men.annotations.Query;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +25,7 @@ public class Hurricane {
     private @Getter Set<State> affectedAreas;
 
     public boolean isAffected(Location location) {
-        return affectedAreas.contains(location.getState());
+        Optional<State> state = location.estimateState();
+        return state.isPresent() && affectedAreas.contains(state.get());
     }
 }

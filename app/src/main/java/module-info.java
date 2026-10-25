@@ -1,6 +1,7 @@
 open module com.one_half_men.app {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.net.http;
 
     requires lombok;
 
@@ -10,6 +11,7 @@ open module com.one_half_men.app {
     provides io.avaje.jsonb.spi.JsonbExtension with com.one_half_men.app.jsonb.GeneratedJsonComponent;
 
     requires com.one_half_men.annotations;
+    requires io.avaje.json.node;
 
     exports com.one_half_men.app;
 }

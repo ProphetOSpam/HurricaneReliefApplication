@@ -16,3 +16,6 @@ target/
 .factorypath
 
 json/test.json
+
+# API Key
+.env

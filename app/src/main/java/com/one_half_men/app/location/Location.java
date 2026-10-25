@@ -1,5 +1,7 @@
 package com.one_half_men.app.location;
 
+import java.util.Optional;
+
 import com.one_half_men.app.distance.Distance;
 
 import io.avaje.jsonb.Json;
@@ -9,6 +11,6 @@ import io.avaje.jsonb.Json;
 @Json.SubType(type = Coordinates.class)
 public interface Location {
     public Distance distanceTo(Location other);
-    
-    public State getState();
+
+    public Optional<State> estimateState();
 }
