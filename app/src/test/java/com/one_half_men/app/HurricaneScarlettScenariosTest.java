@@ -44,14 +44,21 @@ public class HurricaneScarlettScenariosTest {
     private static final String DELL_USER = "sophies_father_dell";
     private static Key<User> dellKey;
 
+
     private static final String ROSA_USER = "rosa";
     private static Key<User> rosaKey;
+    private static final Address ROSA_ADDRESS = new Address("8 Ropemakers Ln", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29401")));
+
 
     private static Request matchedRosaRequest;
 
-    private static final String FELIX_USER = "relix";
+    private static final String FELIX_USER = "felix";
     private static Key<User> felixKey;
     private static Key<Shelter> felixShelterKey;
+    private static final Address FELIX_SHELTER_ADDRESS = new Address("40 Tradd St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29401")));
+
+    private static final String SLUMBUM_USER = "lordSlumbum";
+    private static Key<User> slumbumKey;
 
     @BeforeAll
     static void init() throws AccountCreationError {
@@ -63,6 +70,7 @@ public class HurricaneScarlettScenariosTest {
         User rosa = USER_DB.get(rosaKey);
 
         rosa.getSpecialties().add(new Specialty.Transportation(4, Set.of(new Species("dog"))));
+        rosa.setLocation(ROSA_ADDRESS);
 
         felixKey = HurricaneApplication.getInstance().createAccount(
                 USER_DB,
@@ -71,13 +79,113 @@ public class HurricaneScarlettScenariosTest {
 
         User felix = USER_DB.get(felixKey);
 
+        slumbumKey = HurricaneApplication.getInstance().createAccount(
+                USER_DB,
+                SLUMBUM_USER,
+                "password");
+
+        User slumbum = USER_DB.get(felixKey);
+
         felixShelterKey = SHELTER_DB.create(Shelter.builder()
+                .name("Felix House")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of(new Species("dog"))),
                         new Resource.MedicalStaff(),
                         new Resource.AnimalCapacity(1),
                         new Resource.HumanCapacity(3)))
-                .owner(felix).build());
+                .owner(felix)
+                .location(FELIX_SHELTER_ADDRESS)
+                .build());
+
+        SHELTER_DB.create(Shelter.builder()
+                .name("No Animals")
+                .resources(Set.of(
+                        new Resource.AllowedPets(Set.of()),
+                        new Resource.MedicalStaff(),
+                        new Resource.AnimalCapacity(0),
+                        new Resource.HumanCapacity(10)))
+                .location(new Address("194 W Poplar St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
+                .owner(slumbum).build());
+
+        SHELTER_DB.create(Shelter.builder()
+                .name("The Grand Hilbert Hotel")
+                .resources(Set.of(
+                        new Resource.AllowedPets(Set.of()),
+                        new Resource.MedicalStaff(),
+                        new Resource.AnimalCapacity(100),
+                        new Resource.HumanCapacity(100)))
+                .location(new Address("226 Gordon St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
+                .owner(slumbum).build());
+
+        SHELTER_DB.create(Shelter.builder()
+                .name("New York City Alleyway")
+                .resources(Set.of(
+                        new Resource.AllowedPets(Set.of(new Species("rat"))),
+                        new Resource.MedicalStaff(),
+                        new Resource.AnimalCapacity(1000),
+                        new Resource.HumanCapacity(10)))
+                .location(new Address("1 Elmwood Ave", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
+                .owner(slumbum).build());
+
+        SHELTER_DB.create(Shelter.builder()
+                .name("No Humans")
+                .resources(Set.of(
+                        new Resource.AllowedPets(Set.of(new Species("dog"),new Species("cat"))),
+                        new Resource.MedicalStaff(),
+                        new Resource.AnimalCapacity(100),
+                        new Resource.HumanCapacity(0)))
+                .location(new Address("12 Perry St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
+                .owner(slumbum).build());
+
+        SHELTER_DB.create(Shelter.builder()
+                .name("Gemini Shelter")
+                .resources(Set.of(
+                        new Resource.AllowedPets(Set.of(new Species("cat"), new Species("dog"), new Species("rabbit"))),
+                        new Resource.MedicalStaff(),
+                        new Resource.AnimalCapacity(45),
+                        new Resource.HumanCapacity(12)))
+                .location(new Address("3 Murphy Ct", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
+                .owner(slumbum).build());
+
+        SHELTER_DB.create(Shelter.builder()
+                .name("Another Charleston Shelter")
+                .resources(Set.of(
+                        new Resource.AllowedPets(Set.of(new Species("rabbit"))),
+                        new Resource.MedicalStaff(),
+                        new Resource.AnimalCapacity(5),
+                        new Resource.HumanCapacity(12)))
+                .location(new Address("41 Smith St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29401"))))
+                .owner(slumbum).build());
+
+        SHELTER_DB.create(Shelter.builder()
+                .name("French Shelter")
+                .resources(Set.of(
+                        new Resource.AllowedPets(Set.of()),
+                        new Resource.MedicalStaff(),
+                        new Resource.AnimalCapacity(69),
+                        new Resource.HumanCapacity(420)))
+                .location(new Address("17 Chalmers St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29401"))))
+                .owner(slumbum).build());
+
+        SHELTER_DB.create(Shelter.builder()
+                .name("North Shelter")
+                .resources(Set.of(
+                        new Resource.AllowedPets(Set.of()),
+                        new Resource.MedicalStaff(),
+                        new Resource.AnimalCapacity(6),
+                        new Resource.HumanCapacity(7)))
+                .location(new Address("35 Poinsett St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
+                .owner(slumbum).build());
+
+        SHELTER_DB.create(Shelter.builder()
+                .name("The Final Shelter")
+                .resources(Set.of(
+                        new Resource.AllowedPets(Set.of(new Species("dog"))),
+                        new Resource.MedicalStaff(),
+                        new Resource.AnimalCapacity(20),
+                        new Resource.HumanCapacity(26)))
+                .location(new Address("8 Murray Blvd", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
+                .owner(slumbum).build());
     }
 
     @Test
@@ -108,7 +216,7 @@ public class HurricaneScarlettScenariosTest {
                 "Sophie",
                 "Conagher",
                 LocalDate.of(2010, Month.DECEMBER, 25),
-                List.of(new SpecialNeed("Ashmatic",
+                List.of(new SpecialNeed("Asthmatic",
                         "Requires an inhaler at times, must be kept near their person")),
                 new PhoneNumber("864", "555", "5554")));
 
