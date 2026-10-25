@@ -26,12 +26,20 @@ public sealed interface Resource {
     public static final class AnimalCapacity implements Resource {
         int current;
         int max;
+
+        public AnimalCapacity(int max) {
+            this.max = max;
+        }
     }
 
     @Data
     public static final class HumanCapacity implements Resource {
         int current;
         int max;
+
+        public HumanCapacity(int max) {
+            this.max = max;
+        }
     }
 
     @Data

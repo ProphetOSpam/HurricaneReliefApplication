@@ -15,6 +15,10 @@ import lombok.EqualsAndHashCode;
 @Json
 @EqualsAndHashCode(callSuper = true)
 public class ShelterDb extends Database<Shelter> {
+    public ShelterDb() {
+        super();
+    }
+
     public ShelterDb(BaseDatabase<Shelter> base) {
         super(base);
     }
