@@ -1,5 +1,7 @@
 package com.one_half_men.app;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -51,6 +53,7 @@ public class HurricaneScarlettScenariosTest {
 
 
     private static Request matchedRosaRequest;
+    private static Shelter matchedRosaShelter;
 
     private static final String FELIX_USER = "felix";
     private static Key<User> felixKey;
@@ -265,25 +268,30 @@ public class HurricaneScarlettScenariosTest {
     @Test
     @Order(2)
     void FindAShelterAndAssignTheRequest() {
+        ShelterQuery query = ShelterQuery.builder()
+                .resources(Optional.of(Set.of(
+                        new Resource.AllowedPets(Set.of(new Species("dog"))),
+                        new Resource.MedicalStaff(),
+                        new Resource.AnimalCapacity(1),
+                        new Resource.HumanCapacity(3))))
+                .build();
 
-        // Looking for available shelters
-        Shelter shelter;
-        {
-            ShelterQuery query = ShelterQuery.builder()
-                    .resources(Optional.of(Set.of(
-                            new Resource.AllowedPets(Set.of(new Species("dog"))),
-                            new Resource.MedicalStaff(),
-                            new Resource.AnimalCapacity(1),
-                            new Resource.HumanCapacity(3))))
-                    .build();
-
-            shelter = SHELTER_DB.search(query).stream().map(SHELTER_DB::get).findFirst().get();
-
-        }
+        matchedRosaShelter = SHELTER_DB.search(query).stream().map(SHELTER_DB::get).findFirst().get();
 
         matchedRosaRequest.addParticipant(USER_DB.get(rosaKey));
 
-        System.out.println(shelter);
+        System.out.println(matchedRosaShelter);
     }
 
+    @Test
+    @Order(3)
+    void exportTheTripInformation() throws IOException {
+        User rosa = USER_DB.get(rosaKey);
+        String out = PrintableUtils.fullRoute(matchedRosaRequest, rosa.getLocation(), matchedRosaShelter);
+        System.out.println(out);
+
+        try (FileWriter writer = new FileWriter("out.txt")) {
+            writer.write(out);
+        }
+    }
 }
