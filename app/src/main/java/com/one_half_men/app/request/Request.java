@@ -9,6 +9,7 @@ import com.one_half_men.annotations.Query;
 import com.one_half_men.app.being.Being;
 import com.one_half_men.app.location.Location;
 import com.one_half_men.app.shelter.Resource;
+import com.one_half_men.app.user.Specialty;
 import com.one_half_men.app.user.User;
 
 import io.avaje.jsonb.Json;
@@ -16,10 +17,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Json
 @Query
 @Getter
+@ToString
 @AllArgsConstructor
 @Builder
 public class Request {
@@ -33,6 +36,7 @@ public class Request {
     private @Setter String description;
     private @Builder.Default Set<Being> beings = new HashSet<>();
     private @Builder.Default Set<Resource> requiredResources = new HashSet<>();
+    private @Builder.Default Set<Specialty> requiredSpecialties = new HashSet<>();
 
     public User getEditor() {
         return owner.isPresent() ? owner.get() : author;

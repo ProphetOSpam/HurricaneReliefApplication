@@ -30,6 +30,7 @@ public class User {
     private @Setter Person person;
     private @Setter Role role;
     private @Setter Location location;
+    private @Builder.Default Set<Specialty> specialties = new HashSet<>();
     private @Builder.Default Set<Being> family = new HashSet<>();
     private @Builder.Default Set<Request> ownedRequests = new HashSet<>();
     private @Builder.Default Set<Request> participatingRequests = new HashSet<>();
