@@ -24,4 +24,20 @@ public class Person extends Being {
         super(firstName, lastName, birthDate, specialNeeds);
         this.phoneNumber = phoneNumber;
     }
+
+	@Override
+	public String toText() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("Name: %s %s\n", firstName, lastName));
+        sb.append(String.format("Date of Birth: %s\n", birthDate.toString()));
+        sb.append(String.format("Phone Number: %s\n", phoneNumber.toText()));
+        sb.append(String.format(
+                    "Special Needs:\n- %s\n",
+                    String.join(
+                        "\n- ",
+                        specialNeeds.stream().map(SpecialNeed::toText).toList())));
+
+		return sb.toString();
+	}
 }
