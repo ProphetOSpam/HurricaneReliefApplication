@@ -65,6 +65,12 @@ public class QueryProcessor extends AbstractProcessor {
         return false;
     }
 
+    /**
+     * Generates the `XQuery` class for the class `element`.
+     *
+     * @param element The class to generate the query for
+     * @throws IOException
+     */
     private void generateClass(Element element) throws IOException {
         Types typeUtils = processingEnv.getTypeUtils();
         Elements elementUtils = processingEnv.getElementUtils();
