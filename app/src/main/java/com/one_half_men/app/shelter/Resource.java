@@ -1,11 +1,50 @@
 package com.one_half_men.app.shelter;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import java.util.Set;
 
-@AllArgsConstructor
-@Data
-public class Resource {
-    String resource;
-    String amount;
+import com.one_half_men.app.being.Species;
+
+import io.avaje.jsonb.Json;
+import lombok.Data;
+import lombok.NonNull;
+
+@Json
+@Json.SubType(type = Resource.AllowedPets.class)
+@Json.SubType(type = Resource.AnimalCapacity.class)
+@Json.SubType(type = Resource.HumanCapacity.class)
+@Json.SubType(type = Resource.MedicalStaff.class)
+@Json.SubType(type = Resource.WheelchairAccessible.class)
+@Json.SubType(type = Resource.Custom.class)
+public sealed interface Resource {
+    @Data
+    public static final class AllowedPets implements Resource {
+        @NonNull
+        Set<Species> pets;
+    }
+
+    @Data
+    public static final class AnimalCapacity implements Resource {
+        int current;
+        int max;
+    }
+
+    @Data
+    public static final class HumanCapacity implements Resource {
+        int current;
+        int max;
+    }
+
+    @Data
+    public static final class MedicalStaff implements Resource {
+    }
+
+    @Data
+    public static final class WheelchairAccessible implements Resource {
+    }
+
+    @Data
+    public static final class Custom implements Resource {
+        @NonNull
+        String value;
+    }
 }

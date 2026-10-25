@@ -8,6 +8,7 @@ import java.util.Set;
 import com.one_half_men.annotations.Query;
 import com.one_half_men.app.being.Being;
 import com.one_half_men.app.location.Location;
+import com.one_half_men.app.shelter.Resource;
 import com.one_half_men.app.user.User;
 
 import io.avaje.jsonb.Json;
@@ -31,6 +32,7 @@ public class Request {
     private @Setter Location location;
     private @Setter String description;
     private @Builder.Default Set<Being> beings = new HashSet<>();
+    private @Builder.Default Set<Resource> requiredResources = new HashSet<>();
 
     public User getEditor() {
         return owner.isPresent() ? owner.get() : author;
