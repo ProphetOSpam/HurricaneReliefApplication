@@ -87,7 +87,7 @@ public class HurricaneScarlettScenariosTest {
                 SLUMBUM_USER,
                 "password");
 
-        User slumbum = USER_DB.get(felixKey);
+        User slumbum = USER_DB.get(slumbumKey);
 
         felixShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("Felix House")
@@ -100,7 +100,7 @@ public class HurricaneScarlettScenariosTest {
                 .location(FELIX_SHELTER_ADDRESS)
                 .build());
 
-        SHELTER_DB.create(Shelter.builder()
+        Key<Shelter> noAnimalShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("No Animals")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of()),
@@ -110,7 +110,7 @@ public class HurricaneScarlettScenariosTest {
                 .location(new Address("194 W Poplar St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
                 .owner(slumbum).build());
 
-        SHELTER_DB.create(Shelter.builder()
+        Key<Shelter> hilbertShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("The Grand Hilbert Hotel")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of()),
@@ -120,7 +120,7 @@ public class HurricaneScarlettScenariosTest {
                 .location(new Address("226 Gordon St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
                 .owner(slumbum).build());
 
-        SHELTER_DB.create(Shelter.builder()
+        Key<Shelter> newYorkCityShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("New York City Alleyway")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of(new Species("rat"))),
@@ -130,7 +130,7 @@ public class HurricaneScarlettScenariosTest {
                 .location(new Address("1 Elmwood Ave", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
                 .owner(slumbum).build());
 
-        SHELTER_DB.create(Shelter.builder()
+        Key<Shelter> noHumanShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("No Humans")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of(new Species("dog"),new Species("cat"))),
@@ -140,7 +140,7 @@ public class HurricaneScarlettScenariosTest {
                 .location(new Address("12 Perry St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
                 .owner(slumbum).build());
 
-        SHELTER_DB.create(Shelter.builder()
+        Key<Shelter> geminiShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("Gemini Shelter")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of(new Species("cat"), new Species("dog"), new Species("rabbit"))),
@@ -150,7 +150,7 @@ public class HurricaneScarlettScenariosTest {
                 .location(new Address("3 Murphy Ct", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
                 .owner(slumbum).build());
 
-        SHELTER_DB.create(Shelter.builder()
+        Key<Shelter> anotherShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("Another Charleston Shelter")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of(new Species("rabbit"))),
@@ -160,7 +160,7 @@ public class HurricaneScarlettScenariosTest {
                 .location(new Address("41 Smith St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29401"))))
                 .owner(slumbum).build());
 
-        SHELTER_DB.create(Shelter.builder()
+        Key<Shelter> frenchShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("French Shelter")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of()),
@@ -170,8 +170,8 @@ public class HurricaneScarlettScenariosTest {
                 .location(new Address("17 Chalmers St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29401"))))
                 .owner(slumbum).build());
 
-        SHELTER_DB.create(Shelter.builder()
-                .name("North Shelter")
+        Key<Shelter> sjelterShelterKey = SHELTER_DB.create(Shelter.builder()
+                .name("The Sjelter")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of()),
                         new Resource.MedicalStaff(),
@@ -180,7 +180,7 @@ public class HurricaneScarlettScenariosTest {
                 .location(new Address("35 Poinsett St", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
                 .owner(slumbum).build());
 
-        SHELTER_DB.create(Shelter.builder()
+        Key<Shelter> finalShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("The Final Shelter")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of(new Species("dog"))),
@@ -189,6 +189,74 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(26)))
                 .location(new Address("8 Murray Blvd", "Charleston", State.SOUTH_CAROLINA, Optional.of(new ZipCode("29403"))))
                 .owner(slumbum).build());
+
+        REQUEST_DB.create(Request.builder()
+                .author(slumbum)
+                .owner(Optional.of(slumbum))
+                .beings(Set.of(
+                        new Animal(
+                                "Rabies",
+                                "Ronnie",
+                                LocalDate.of(2026, 10, 02),
+                                List.of(new SpecialNeed("Rabies", "Don't get bitten")),
+                                new Species("rat")
+                        )
+                ))
+                .date(LocalDate.now())
+                .location(SHELTER_DB.get(newYorkCityShelterKey).getLocation())
+                .requiredResources(
+                        Set.of(new Resource.MedicalStaff()))
+                .description(
+                        "My (very kind) rat has rabies, and I need help taking care of him.")
+                .build());
+
+        REQUEST_DB.create(Request.builder()
+                .author(slumbum)
+                .owner(Optional.of(slumbum))
+                .date(LocalDate.now())
+                .location(SHELTER_DB.get(hilbertShelterKey).getLocation())
+                .description(
+                        "My grand hotel is experiencing a major mathematical conundrum. Any mathematicians able to help me figure out how to house one more person?")
+                .build());
+
+        REQUEST_DB.create(Request.builder()
+                .author(slumbum)
+                .owner(Optional.of(slumbum))
+                .date(LocalDate.now())
+                .location(SHELTER_DB.get(finalShelterKey).getLocation())
+                .requiredResources(Set.of(new Resource.Custom("Water")))
+                .description(
+                        "I'm quite parched. May one of you fine specimens aid me in obtaining liquid H2O?")
+                .build());
+
+        REQUEST_DB.create(Request.builder()
+                .author(slumbum)
+                .owner(Optional.of(slumbum))
+                .date(LocalDate.now())
+                .location(SHELTER_DB.get(sjelterShelterKey).getLocation())
+                .requiredResources(Set.of(new Resource.Custom("Portable Generator")))
+                .description(
+                        "I need power for my phone to stay in contact with family.")
+                .build());
+
+        REQUEST_DB.create(Request.builder()
+                .author(slumbum)
+                .owner(Optional.of(slumbum))
+                .date(LocalDate.now())
+                .location(SHELTER_DB.get(frenchShelterKey).getLocation())
+                .description(
+                        "I need help cleaning up minor damage to my house.")
+                .build());
+
+        REQUEST_DB.create(Request.builder()
+                .author(slumbum)
+                .owner(Optional.of(slumbum))
+                .date(LocalDate.now())
+                .location(SHELTER_DB.get(geminiShelterKey).getLocation())
+                .requiredResources(Set.of(new Resource.Custom("Food")))
+                .description(
+                        "I'm hungry!")
+                .build());
     }
 
     @Test
