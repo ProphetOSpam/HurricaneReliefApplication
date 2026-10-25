@@ -18,8 +18,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * 
- * MapTools Provides map api tools
+ * Pelias & OpenRouteService API tools via api.heigit.org
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MapTools {
@@ -81,7 +80,7 @@ public class MapTools {
                                 .fromJsonObject(response.body())
                                 .get("features");
 
-                JsonNode bestResult = findBestCoord(features);
+                JsonNode bestResult = findBestCoordinates(features);
 
                 return readCoordinates(bestResult);
         }
@@ -127,22 +126,22 @@ public class MapTools {
         /**
          * Finds the shelter with the shortest driving time.
          * 
-         * @param startingAddress The address we are driving from
-         * @param shelters        The list of shelters we are choosing from
+         * @param start   The location we are starting from
+         * @param options The list of addresses we are choosing from
          * @return The address of the closest shelter
          * @throws IOException
          * @throws InterruptedException
          */
-        public static Address findClosestAddress(Address startingAddress, Address[] shelters)
+        public static Location findClosestLocation(Location start, Location[] options)
                         throws IOException, InterruptedException {
 
-                Coordinates startingCoordinates = estimateCoordinates(startingAddress);
+                Coordinates startingCoordinates = start.coordinates();
 
-                Address closestShelter = null;
+                Location closest = null;
                 double shortestTime = Double.MAX_VALUE;
 
-                for (Address shelter : shelters) {
-                        Coordinates shelterCoordinates = estimateCoordinates(shelter);
+                for (Location shelter : options) {
+                        Coordinates shelterCoordinates = shelter.coordinates();
 
                         double drivingTime = getDrivingTime(
                                         startingCoordinates,
@@ -150,11 +149,11 @@ public class MapTools {
 
                         if (drivingTime < shortestTime) {
                                 shortestTime = drivingTime;
-                                closestShelter = shelter;
+                                closest = shelter;
                         }
                 }
 
-                return closestShelter;
+                return closest;
         }
 
         /**
@@ -166,7 +165,7 @@ public class MapTools {
          * @throws IOException
          * @throws InterruptedException
          */
-        public static String[] getDrivingDirections(
+        public static List<String> getDrivingDirections(
                         Location start,
                         Location end) throws IOException, InterruptedException {
 
@@ -176,7 +175,7 @@ public class MapTools {
 
                 return steps.stream()
                                 .map(node -> node.extract("instruction"))
-                                .toArray(String[]::new);
+                                .toList();
         }
 
         /**
@@ -186,7 +185,7 @@ public class MapTools {
          * @param features The information about the street address
          * @return The node representation of the closest address
          */
-        private static JsonNode findBestCoord(JsonArray features) {
+        private static JsonNode findBestCoordinates(JsonArray features) {
                 for (JsonNode result : features.elements()) {
                         String layer = result.extractNode("properties").extractNode("layer").text();
 
@@ -287,43 +286,23 @@ public class MapTools {
                 return routes.elements().getFirst();
         }
 
-        // /**
-        // * Determines the route from one address to another and returns it to show on
-        // a map.
-        // * @param startingAddress The address the route begins at
-        // * @param endingAddress The address the route ends on
-        // * @return The Driving route to be plotted on a map
-        // * @throws IOException
-        // * @throws InterruptedException
-        // */
-        // public DrivingRoute getDrivingRoute(Address startingAddress, Address
-        // endingAddress)
-        // throws IOException, InterruptedException {
+        /**
+         * Determines the route from one address to another
+         * and returns it to show on a map.
+         *
+         * @param start The address the route begins at
+         * @param end   The address the route ends on
+         * @return The Driving route to be plotted on a map
+         * @throws IOException
+         * @throws InterruptedException
+         */
+        public DrivingRoute getDrivingRoute(Location start, Location end) throws IOException, InterruptedException {
+                List<Coordinates> routePoints = getRoutePoints(
+                                start.coordinates(),
+                                end.coordinates());
 
-        // Coordinates startCoordinates = getCoordinates(startingAddress);
-        // Coordinates endCoordinates = getCoordinates(endingAddress);
-
-        // ArrayList<Coordinates> routePoints = getRoutePoints(
-        // startCoordinates,
-        // endCoordinates
-        // );
-
-        // MapLocation startingLocation = new MapLocation(
-        // startingAddress,
-        // startCoordinates
-        // );
-
-        // MapLocation endingLocation = new MapLocation(
-        // endingAddress,
-        // endCoordinates
-        // );
-
-        // return new DrivingRoute(
-        // startingLocation,
-        // endingLocation,
-        // routePoints
-        // );
-        // }
+                return new DrivingRoute(start, end, routePoints);
+        }
 
         /**
          * Determines all the points to show on the route to be plotted on a map
@@ -368,7 +347,7 @@ public class MapTools {
                                 .extractNode("geometry")
                                 .extractNode("coordinates");
 
-                List<Coordinates> routePoints = points.stream()
+                return points.stream()
                                 .map(point -> {
                                         JsonArray array = (JsonArray) point;
                                         double longitude = (Double) array.elements().get(0).toPlain();
@@ -377,8 +356,6 @@ public class MapTools {
                                         return new Coordinates(latitude, longitude);
                                 })
                                 .toList();
-
-                return routePoints;
         }
 
         /**
