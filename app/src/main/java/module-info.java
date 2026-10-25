@@ -18,4 +18,5 @@ open module com.one_half_men.app {
     exports com.one_half_men.app.location;
     exports com.one_half_men.app.request;
     exports com.one_half_men.app.shelter;
+    exports com.one_half_men.app.user;
 }
