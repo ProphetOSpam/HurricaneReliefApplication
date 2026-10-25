@@ -10,7 +10,12 @@ import io.avaje.jsonb.Json;
 @Json.SubType(type = Address.class)
 @Json.SubType(type = Coordinates.class)
 public interface Location {
-    public Distance distanceTo(Location other);
+    // TODO: actually do this
+    public default Distance distanceTo(Location other) {
+        return Distance.of(Distance.Unit.METERS, 0);
+    }
 
-    public Optional<State> estimateState();
+    public Coordinates coordinates();
+
+    public Optional<State> state();
 }

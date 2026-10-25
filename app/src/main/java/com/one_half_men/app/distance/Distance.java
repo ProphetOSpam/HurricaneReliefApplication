@@ -1,9 +1,10 @@
 package com.one_half_men.app.distance;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
 public class Distance {
     // inspired in concept by
@@ -21,15 +22,20 @@ public class Distance {
         public double fromMeters(double meters) {
             return meters * ratio.numerator() / ratio.denominator();
         }
+
+        public double toMeters(double value) {
+            return value * ratio.denominator() / ratio.numerator();
+        }
     }
 
+    private final Unit unit;
     private final double meters;
 
-    public double asMeters() {
-        return meters;
+    public static Distance of(Unit unit, double value) {
+        return new Distance(unit, unit.toMeters(value));
     }
 
-    public double asUnit(Unit unit) {
+    public double as(Unit unit) {
         return unit.fromMeters(meters);
     }
 }

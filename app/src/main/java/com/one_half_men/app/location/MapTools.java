@@ -160,20 +160,17 @@ public class MapTools {
         /**
          * Collects the driving directions to the shelter
          * 
-         * @param startingAddress The address the route starts at
-         * @param endingAddress   The address the route ends at
+         * @param start The place the route starts at
+         * @param end   The place the route ends at
          * @return A string array where each item represents a direction on the route
          * @throws IOException
          * @throws InterruptedException
          */
         public static String[] getDrivingDirections(
-                        Address startingAddress,
-                        Address endingAddress) throws IOException, InterruptedException {
+                        Location start,
+                        Location end) throws IOException, InterruptedException {
 
-                Coordinates start = estimateCoordinates(startingAddress);
-                Coordinates end = estimateCoordinates(endingAddress);
-
-                JsonNode route = getRoute(start, end);
+                JsonNode route = getRoute(start.coordinates(), end.coordinates());
                 JsonArray segments = (JsonArray) route.extractNode("segments");
                 JsonArray steps = (JsonArray) segments.elements().getFirst().extractNode("steps");
 
