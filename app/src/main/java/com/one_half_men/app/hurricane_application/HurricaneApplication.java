@@ -24,15 +24,18 @@ import com.one_half_men.app.request.RequestQuery;
 import com.one_half_men.app.shelter.Shelter;
 import com.one_half_men.app.shelter.ShelterQuery;
 import com.one_half_men.app.user.Authentication;
+import com.one_half_men.app.user.Authentication.Username;
 import com.one_half_men.app.user.User;
 import com.one_half_men.app.user.UserQuery;
-import com.one_half_men.app.user.Authentication.Username;
+
+import lombok.Getter;
 
 public class HurricaneApplication {
     public static final Random RANDOM = new SecureRandom();
 
     private static final HurricaneApplication INSTANCE = new HurricaneApplication();
 
+    @Getter
     private Optional<User> loggedInUser = Optional.empty();
 
     public static HurricaneApplication getInstance() {
@@ -112,9 +115,7 @@ public class HurricaneApplication {
         return db.create(request);
     }
 
-    public void editRequest(RequestDb db, Key<Request> key, Consumer<Request> consumer) throws PermissionsError {
-        Request request = db.get(key);
-
+    public void editRequest(Request request, Consumer<Request> consumer) throws PermissionsError {
         if (request.getEditor() != loggedInUser.get()) {
             throw new PermissionsError();
         }

@@ -25,13 +25,17 @@ public class Animal extends Being {
     public String toText() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(String.format("Name: %s %s\n", firstName, lastName));
-        sb.append(String.format("Date of Birth: %s\n", birthDate.toString()));
-        sb.append(String.format(
-                "Special Needs:\n- %s\n",
-                String.join(
-                        "\n- ",
-                        specialNeeds.stream().map(SpecialNeed::toText).toList())));
+        sb.append(String.format("- Species: %s\n", species.getValue()));
+        sb.append(String.format("- Name: %s %s\n", firstName, lastName));
+        sb.append(String.format("- Date of Birth: %s\n", birthDate.toString()));
+
+        if (!specialNeeds.isEmpty()) {
+            sb.append(String.format(
+                    "- Special Needs:\n  - %s\n",
+                    String.join(
+                            "\n  - ",
+                            specialNeeds.stream().map(SpecialNeed::toText).toList())));
+        }
 
         return sb.toString();
     }

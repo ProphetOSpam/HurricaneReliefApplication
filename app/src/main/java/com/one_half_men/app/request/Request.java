@@ -31,7 +31,7 @@ public class Request {
     private @Builder.Default Boolean proxy = false;
     private @Builder.Default Set<User> participants = new HashSet<>();
     private @Setter LocalDate date;
-    private @Setter @Builder.Default Optional<CloseReason> closeReason = Optional.empty();
+    private @Builder.Default Optional<CloseReason> closeReason = Optional.empty();
     private @Setter Location location;
     private @Setter String description;
     private @Builder.Default Set<Being> beings = new HashSet<>();

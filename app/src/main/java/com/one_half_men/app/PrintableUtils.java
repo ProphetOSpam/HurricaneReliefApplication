@@ -18,23 +18,23 @@ public class PrintableUtils {
             StringBuilder sb = new StringBuilder();
 
             sb.append(String.format(
-                    "Shelter:\n- Name: %s\n - Location: %s\n",
+                    "Shelter:\n- Name: %s\n- Location: %s\n\n",
                     shelter.getName(),
                     shelter.getLocation().toText()));
 
             sb.append(String.format(
-                    "Family:\n- %s\n- %s\n",
-                    request.getAuthor(),
+                    "Family:\n%s\n%s\n",
+                    request.getAuthor().getPerson().toText(),
                     String.join(
-                            "\n- ",
+                            "\n",
                             request.getBeings().stream().map(being -> being.toText()).toList())));
 
             sb.append(String.format(
-                    "Current Location to Request Route:\n%s\n",
+                    "Current Location to Request Route:\n- %s\n\n",
                     String.join("\n- ", MapTools.getDrivingDirections(start, request.getLocation()))));
 
             sb.append(String.format(
-                    "Request to Shelter Route:\n%s\n",
+                    "Request to Shelter Route:\n- %s\n",
                     String.join("\n- ", MapTools.getDrivingDirections(request.getLocation(), shelter.getLocation()))));
 
             return sb.toString();
