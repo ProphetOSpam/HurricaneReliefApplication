@@ -17,5 +17,5 @@ public interface Location {
 
     public Coordinates coordinates();
 
-    public Optional<State> state();
+    public Optional<State> estimateState();
 }

@@ -20,7 +20,7 @@ public class Coordinates implements Location {
     }
 
     @Override
-    public Optional<State> state() {
+    public Optional<State> estimateState() {
         try {
             return MapTools.estimateState(this);
         } catch (IOException | InterruptedException e) {

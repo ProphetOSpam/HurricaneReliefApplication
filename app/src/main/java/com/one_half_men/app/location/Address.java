@@ -28,7 +28,7 @@ public class Address implements Location {
     }
 
     @Override
-    public Optional<State> state() {
+    public Optional<State> estimateState() {
         return Optional.of(state);
     }
 
