@@ -372,6 +372,7 @@ public class HurricaneScarlettScenariosTest {
                 .build();
 
         matchedRosaRequest = ROSA_APP.searchRequest(REQUEST_DB, query).stream().map(REQUEST_DB::get).findFirst().get();
+        matchedRosaRequest.addParticipant(rosa);
     }
 
     @Test
