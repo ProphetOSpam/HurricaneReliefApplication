@@ -48,7 +48,7 @@ public sealed interface Resource {
         @Override
         public boolean change(int value) {
             int newCurrent = current + value;
-            if (0 < newCurrent && newCurrent <= max) {
+            if (0 <= newCurrent && newCurrent <= max) {
                 current = newCurrent;
                 return true;
             }

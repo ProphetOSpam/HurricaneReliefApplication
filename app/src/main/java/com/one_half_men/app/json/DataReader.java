@@ -23,7 +23,7 @@ public class DataReader {
         try {
             return fun.apply(type.fromJson(new FileReader(file)));
         } catch (IOException e) {
-            throw new RuntimeException(String.format("Couldn't read database of type %s", type));
+            throw new RuntimeException(e);
         }
     }
 

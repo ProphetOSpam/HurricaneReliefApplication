@@ -3,6 +3,7 @@ package com.one_half_men.app;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -12,11 +13,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.condition.EnabledIf;
 
 import com.one_half_men.app.being.Animal;
 import com.one_half_men.app.being.Person;
@@ -32,6 +35,8 @@ import com.one_half_men.app.error.AccountCreationError;
 import com.one_half_men.app.error.AccountLoginError;
 import com.one_half_men.app.error.PermissionsError;
 import com.one_half_men.app.hurricane_application.HurricaneApplication;
+import com.one_half_men.app.json.DataReader;
+import com.one_half_men.app.json.DataWriter;
 import com.one_half_men.app.location.Address;
 import com.one_half_men.app.location.State;
 import com.one_half_men.app.location.ZipCode;
@@ -48,45 +53,83 @@ import com.one_half_men.app.user.User;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class HurricaneScarlettScenariosTest {
-    private static final UserDb USER_DB = new UserDb();
-    private static final RequestDb REQUEST_DB = new RequestDb();
-    private static final ShelterDb SHELTER_DB = new ShelterDb();
-    private static final HurricaneDb HURRICANE_DB = new HurricaneDb();
+    // if false then "reset" mode: this'll initialize with mock data and write
+    // if true then "run" mode: this'll initialize from the file (do "reset" first)
+    // and go through the scenario
+    private static boolean isRun() {
+        // modify for whatever during testing
+        return false;
+    }
 
-    private static final HurricaneApplication DELL_APP = new HurricaneApplication(
-            USER_DB,
-            REQUEST_DB,
-            SHELTER_DB,
-            HURRICANE_DB);
+    private static UserDb USER_DB;
+    private static final File USER_DB_FILE = new File("../json_test/user_db.json");
 
-    private static final HurricaneApplication ROSA_APP = new HurricaneApplication(
-            USER_DB,
-            REQUEST_DB,
-            SHELTER_DB,
-            HURRICANE_DB);
+    private static RequestDb REQUEST_DB;
+    private static final File REQUEST_DB_FILE = new File("../json_test/request_db.json");
 
-    private static final Address ROSA_ADDRESS = new Address("8 Ropemakers Ln", "Charleston", State.SOUTH_CAROLINA,
-            Optional.of(new ZipCode("29401")));
+    private static ShelterDb SHELTER_DB;
+    private static final File SHELTER_DB_FILE = new File("../json_test/shelter_db.json");
+
+    private static HurricaneDb HURRICANE_DB;
+    private static final File HURRICANE_DB_FILE = new File("../json_test/hurricane_db.json");
+
+    private static HurricaneApplication DELL_APP;
+    private static HurricaneApplication ROSA_APP;
+    private static HurricaneApplication FELIX_APP;
 
     private static Request matchedRosaRequest;
     private static Key<Request> matchedRosaRequestKey;
     private static Shelter matchedRosaShelter;
 
-    private static final HurricaneApplication FELIX_APP = new HurricaneApplication(
-            USER_DB,
-            REQUEST_DB,
-            SHELTER_DB,
-            HURRICANE_DB);
+    private static void initializeApps() {
+        DELL_APP = new HurricaneApplication(
+                USER_DB,
+                REQUEST_DB,
+                SHELTER_DB,
+                HURRICANE_DB);
 
-    private static final Address FELIX_SHELTER_ADDRESS = new Address("40 Tradd St", "Charleston",
-            State.SOUTH_CAROLINA,
-            Optional.of(new ZipCode("29401")));
+        ROSA_APP = new HurricaneApplication(
+                USER_DB,
+                REQUEST_DB,
+                SHELTER_DB,
+                HURRICANE_DB);
 
-    private static final String SLUMBUM_USER = "lordSlumbum";
-    private static Key<User> slumbumKey;
+        FELIX_APP = new HurricaneApplication(
+                USER_DB,
+                REQUEST_DB,
+                SHELTER_DB,
+                HURRICANE_DB);
+    }
 
     @BeforeAll
-    static void init() throws AccountCreationError, AccountLoginError, IOException {
+    static void initRun() throws AccountLoginError {
+        if (!isRun())
+            return;
+
+        USER_DB = DataReader.readDatabase(UserDb.type(), UserDb::new, USER_DB_FILE);
+        REQUEST_DB = DataReader.readDatabase(RequestDb.type(), RequestDb::new, REQUEST_DB_FILE);
+        SHELTER_DB = DataReader.readDatabase(ShelterDb.type(), ShelterDb::new, SHELTER_DB_FILE);
+        HURRICANE_DB = DataReader.readDatabase(HurricaneDb.type(), HurricaneDb::new, HURRICANE_DB_FILE);
+
+        initializeApps();
+
+        ROSA_APP.login("rosa", "password");
+        FELIX_APP.login("felix", "password");
+        // dell logs in
+    }
+
+    @BeforeAll
+    static void initReset() throws AccountCreationError, AccountLoginError, IOException {
+        if (isRun())
+            return;
+
+        USER_DB = new UserDb();
+        REQUEST_DB = new RequestDb();
+        SHELTER_DB = new ShelterDb();
+        HURRICANE_DB = new HurricaneDb();
+
+        initializeApps();
+
         final String ROSA_USER = "rosa";
 
         ROSA_APP.createAccount(
@@ -97,7 +140,11 @@ public class HurricaneScarlettScenariosTest {
         User rosa = ROSA_APP.getLoggedInUser().get();
 
         rosa.getSpecialties().add(new Specialty.Transportation(4, Set.of(new Species("dog"))));
-        rosa.setLocation(ROSA_ADDRESS);
+        rosa.setLocation(new Address(
+                "8 Ropemakers Ln",
+                "Charleston",
+                State.SOUTH_CAROLINA,
+                Optional.of(new ZipCode("29401"))));
 
         final String FELIX_USER = "felix";
         FELIX_APP.createAccount(
@@ -106,9 +153,7 @@ public class HurricaneScarlettScenariosTest {
 
         Key<User> felixKey = FELIX_APP.login(FELIX_USER, "password");
 
-        slumbumKey = FELIX_APP.createAccount(
-                SLUMBUM_USER,
-                "password");
+        Key<User> slumbumKey = FELIX_APP.createAccount("lordSlumbum", "password");
 
         User slumbum = USER_DB.get(slumbumKey);
 
@@ -120,7 +165,11 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.AnimalCapacity(1),
                         new Resource.HumanCapacity(3)))
                 .owner(felixKey)
-                .location(FELIX_SHELTER_ADDRESS)
+                .location(new Address(
+                        "40 Tradd St",
+                        "Charleston",
+                        State.SOUTH_CAROLINA,
+                        Optional.of(new ZipCode("29401"))))
                 .build());
 
         FELIX_APP.getLoggedInUser().get().getOwnedShelters().add(felixShelterKey);
@@ -310,6 +359,7 @@ public class HurricaneScarlettScenariosTest {
 
     @Test
     @Order(0)
+    @EnabledIf("isRun")
     void createTheReliefRequest() throws AccountCreationError, AccountLoginError {
         String DELL_USER = "sophies_father_dell";
 
@@ -374,6 +424,7 @@ public class HurricaneScarlettScenariosTest {
 
     @Test
     @Order(1)
+    @EnabledIf("isRun")
     void matchRosaWithTheRequest() {
         User rosa = ROSA_APP.getLoggedInUser().get();
 
@@ -389,6 +440,7 @@ public class HurricaneScarlettScenariosTest {
 
     @Test
     @Order(2)
+    @EnabledIf("isRun")
     void FindAShelterAndAssignTheRequest() {
         Key<User> rosaKey = ROSA_APP.getLoggedInUserKey().get();
 
@@ -409,6 +461,7 @@ public class HurricaneScarlettScenariosTest {
 
     @Test
     @Order(3)
+    @EnabledIf("isRun")
     void exportTheTripInformation() throws IOException {
         User rosa = ROSA_APP.getLoggedInUser().get();
 
@@ -416,13 +469,14 @@ public class HurricaneScarlettScenariosTest {
                 matchedRosaShelter);
         System.out.println(out);
 
-        try (FileWriter writer = new FileWriter("out.txt")) {
+        try (FileWriter writer = new FileWriter(new File("../json_test/print_out.txt"))) {
             writer.write(out);
         }
     }
 
     @Test
     @Order(4)
+    @EnabledIf("isRun")
     void demonstrateRolePermisssions() throws PermissionsError {
         User dell = DELL_APP.getLoggedInUser().get();
         User rosa = ROSA_APP.getLoggedInUser().get();
@@ -458,6 +512,7 @@ public class HurricaneScarlettScenariosTest {
 
     @Test
     @Order(5)
+    @EnabledIf("isRun")
     void CheckTheFamilyIntoTheShelter() throws PermissionsError {
         System.out.println("\nFelix views his shelters");
 
@@ -497,6 +552,13 @@ public class HurricaneScarlettScenariosTest {
         System.out.printf("Total Pet Capacity: %d\n", animalCapacity.getMax());
         System.out.printf("Current Pet Capacity: %d\n", animalCapacity.getCurrent());
         System.out.printf("Remaining Pet Capacity: %d\n", animalCapacity.remaining());
+    }
 
+    @AfterAll
+    static void writeDatabases() {
+        DataWriter.writeDatabase(UserDb.type(), USER_DB, USER_DB_FILE);
+        DataWriter.writeDatabase(RequestDb.type(), REQUEST_DB, REQUEST_DB_FILE);
+        DataWriter.writeDatabase(ShelterDb.type(), SHELTER_DB, SHELTER_DB_FILE);
+        DataWriter.writeDatabase(HurricaneDb.type(), HURRICANE_DB, HURRICANE_DB_FILE);
     }
 }
