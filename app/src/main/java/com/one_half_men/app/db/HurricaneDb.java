@@ -16,6 +16,10 @@ import lombok.EqualsAndHashCode;
 @Json
 @EqualsAndHashCode(callSuper = true)
 public class HurricaneDb extends Database<Hurricane> {
+	public HurricaneDb() {
+		super();
+	}
+
 	public HurricaneDb(BaseDatabase<Hurricane> base) {
 		super(base);
 	}
