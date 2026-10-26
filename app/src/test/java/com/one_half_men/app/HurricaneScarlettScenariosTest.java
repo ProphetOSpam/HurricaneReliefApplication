@@ -79,7 +79,7 @@ public class HurricaneScarlettScenariosTest {
         ROSA_APP.login(USER_DB, ROSA_USER, "password");
         User rosa = ROSA_APP.getLoggedInUser().get();
 
-        rosa.getSpecialties().add(new Specialty.Transportation(4, Set.of(Species.of("dog"))));
+        rosa.getSpecialties().add(new Specialty.Transportation(4, Set.of(new Species("dog"))));
         rosa.setLocation(ROSA_ADDRESS);
 
         final String FELIX_USER = "felix";
@@ -101,7 +101,7 @@ public class HurricaneScarlettScenariosTest {
         Shelter felixShelter = Shelter.builder()
                 .name("Felix House")
                 .resources(Set.of(
-                        new Resource.AllowedPets(Set.of(Species.of("dog"))),
+                        new Resource.AllowedPets(Set.of(new Species("dog"))),
                         new Resource.MedicalStaff(),
                         new Resource.AnimalCapacity(1),
                         new Resource.HumanCapacity(3)))
@@ -138,7 +138,7 @@ public class HurricaneScarlettScenariosTest {
         Key<Shelter> newYorkCityShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("New York City Alleyway")
                 .resources(Set.of(
-                        new Resource.AllowedPets(Set.of(Species.of("rat"))),
+                        new Resource.AllowedPets(Set.of(new Species("rat"))),
                         new Resource.MedicalStaff(),
                         new Resource.AnimalCapacity(1000),
                         new Resource.HumanCapacity(10)))
@@ -149,7 +149,7 @@ public class HurricaneScarlettScenariosTest {
         Key<Shelter> noHumanShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("No Humans")
                 .resources(Set.of(
-                        new Resource.AllowedPets(Set.of(Species.of("dog"), Species.of("cat"))),
+                        new Resource.AllowedPets(Set.of(new Species("dog"), new Species("cat"))),
                         new Resource.MedicalStaff(),
                         new Resource.AnimalCapacity(100),
                         new Resource.HumanCapacity(0)))
@@ -160,7 +160,7 @@ public class HurricaneScarlettScenariosTest {
         Key<Shelter> geminiShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("Gemini Shelter")
                 .resources(Set.of(
-                        new Resource.AllowedPets(Set.of(Species.of("cat"), Species.of("dog"), Species.of("rabbit"))),
+                        new Resource.AllowedPets(Set.of(new Species("cat"), new Species("dog"), new Species("rabbit"))),
                         new Resource.MedicalStaff(),
                         new Resource.AnimalCapacity(45),
                         new Resource.HumanCapacity(12)))
@@ -171,7 +171,7 @@ public class HurricaneScarlettScenariosTest {
         Key<Shelter> anotherShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("Another Charleston Shelter")
                 .resources(Set.of(
-                        new Resource.AllowedPets(Set.of(Species.of("rabbit"))),
+                        new Resource.AllowedPets(Set.of(new Species("rabbit"))),
                         new Resource.MedicalStaff(),
                         new Resource.AnimalCapacity(5),
                         new Resource.HumanCapacity(12)))
@@ -204,7 +204,7 @@ public class HurricaneScarlettScenariosTest {
         Key<Shelter> finalShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("The Final Shelter")
                 .resources(Set.of(
-                        new Resource.AllowedPets(Set.of(Species.of("dog"))),
+                        new Resource.AllowedPets(Set.of(new Species("dog"))),
                         new Resource.MedicalStaff(),
                         new Resource.AnimalCapacity(20),
                         new Resource.HumanCapacity(26)))
@@ -221,7 +221,7 @@ public class HurricaneScarlettScenariosTest {
                                 "Ronnie",
                                 LocalDate.of(2026, 10, 02),
                                 List.of(new SpecialNeed("Rabies", "Don't get bitten")),
-                                Species.of("rat"))))
+                                new Species("rat"))))
                 .date(LocalDate.now())
                 .location(SHELTER_DB.get(newYorkCityShelterKey).getLocation())
                 .requiredResources(
@@ -345,7 +345,7 @@ public class HurricaneScarlettScenariosTest {
                 "Conagher",
                 LocalDate.of(2021, Month.JANUARY, 27),
                 new ArrayList<>(),
-                Species.of("Miniature Schnauzer (Dog)")));
+                new Species("Miniature Schnauzer (Dog)")));
 
         REQUEST_DB.create(Request.builder()
                 .author(dell)
@@ -354,7 +354,7 @@ public class HurricaneScarlettScenariosTest {
                 .date(LocalDate.now())
                 .location(dell.getLocation())
                 .requiredSpecialties(
-                        Set.of(new Specialty.Transportation(4, Set.of(Species.of("dog")))))
+                        Set.of(new Specialty.Transportation(4, Set.of(new Species("dog")))))
                 .description(
                         "Floodwater is rising around our home, and we cannot use our car. Need transportation for 2 adults, 1 child, and 1 (very kind) dog")
                 .build());
@@ -382,7 +382,7 @@ public class HurricaneScarlettScenariosTest {
 
         ShelterQuery query = ShelterQuery.builder()
                 .resources(Optional.of(Set.of(
-                        new Resource.AllowedPets(Set.of(Species.of("dog"))),
+                        new Resource.AllowedPets(Set.of(new Species("dog"))),
                         new Resource.MedicalStaff(),
                         new Resource.AnimalCapacity(1),
                         new Resource.HumanCapacity(3))))
