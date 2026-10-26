@@ -11,22 +11,20 @@ import java.util.Optional;
 import com.one_half_men.app.hurricane_application.HurricaneApplication;
 
 import io.avaje.jsonb.Json;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Authentication {
     private static final Charset ASCII = StandardCharsets.US_ASCII;
     private static final CharsetEncoder ASCII_ENCODER = ASCII.newEncoder();
 
-    private Authentication() {
-    }
-
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Username {
         private static final int MIN_LENGTH = 2;
         private static final int MAX_LENGTH = 64;
-
-        private Username() {
-        }
 
         public static boolean isValid(String username) {
             return username.length() >= MIN_LENGTH
@@ -35,10 +33,8 @@ public class Authentication {
         }
     }
 
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Password {
-        private Password() {
-        }
-
         private static final int MIN_LENGTH = 8;
         private static final int MAX_LENGTH = 48;
 
