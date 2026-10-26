@@ -34,6 +34,6 @@ public class ShelterDb extends Database<Shelter> {
     }
 
     public static JsonType<BaseDatabase<Shelter>> type() {
-        return JsonbInstance.instance.type(Types.newParameterizedType(Database.class, Shelter.class));
+        return JsonbInstance.instance.type(Types.newParameterizedType(BaseDatabase.class, Shelter.class));
     }
 }
