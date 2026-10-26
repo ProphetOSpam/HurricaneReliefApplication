@@ -238,7 +238,7 @@ public class MapTools {
          * @throws IOException
          * @throws InterruptedException
          */
-        private static double getDrivingTime(Coordinates start, Coordinates end)
+        public static double getDrivingTime(Coordinates start, Coordinates end)
                         throws IOException, InterruptedException {
 
                 JsonNode route = getRoute(start, end);

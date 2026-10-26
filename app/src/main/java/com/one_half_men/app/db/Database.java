@@ -45,8 +45,9 @@ public abstract class Database<V> implements Searchable<V, IQuery<V>> {
     public Set<Key<V>> search(IQuery<V> query) {
         Set<Key<V>> result = new HashSet<Key<V>>();
         for (Key<V> key : base.entries.keySet()) {
-            V user = base.entries.get(key);
-            if (query.matches(user)) {
+            V obj = base.entries.get(key);
+
+            if (query.matches(obj)) {
                 result.add(key);
             }
         }

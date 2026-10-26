@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -58,7 +59,7 @@ public class HurricaneScarlettScenariosTest {
     // and go through the scenario
     private static boolean isRun() {
         // modify for whatever during testing
-        return false;
+        return true;
     }
 
     private static UserDb USER_DB;
@@ -434,6 +435,8 @@ public class HurricaneScarlettScenariosTest {
                 .requiredSpecialties(Optional.of(rosa.getSpecialties()))
                 .build();
 
+        ROSA_APP.searchRequest(query).stream().forEach(System.out::println);
+
         matchedRosaRequestKey = ROSA_APP.searchRequest(query).stream().findFirst().get();
         matchedRosaRequest = ROSA_APP.getRequest(matchedRosaRequestKey);
     }
@@ -445,6 +448,7 @@ public class HurricaneScarlettScenariosTest {
         Key<User> rosaKey = ROSA_APP.getLoggedInUserKey().get();
 
         ShelterQuery query = ShelterQuery.builder()
+                .location(Optional.of(matchedRosaRequest.getLocation()))
                 .resources(Optional.of(Set.of(
                         new Resource.AllowedPets(Set.of(new Species("dog"))),
                         new Resource.MedicalStaff(),
@@ -452,11 +456,15 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(3))))
                 .build();
 
-        matchedRosaShelter = ROSA_APP.searchShelter(query).stream().map(SHELTER_DB::get).findFirst().get();
+        System.out.println("Matched Shelters:");
+        SortedSet<Key<Shelter>> shelters = (SortedSet<Key<Shelter>>) ROSA_APP.searchShelter(query);
+        shelters.stream().map(key -> SHELTER_DB.get(key).getName()).forEach(System.out::println);
+
+        matchedRosaShelter = shelters.stream().map(SHELTER_DB::get).findFirst().get();
+
+        System.out.printf("Using %s because it is the closest\n", matchedRosaShelter.getName());
 
         ROSA_APP.addParticipantToRequest(matchedRosaRequestKey);
-
-        System.out.println(matchedRosaShelter);
     }
 
     @Test
