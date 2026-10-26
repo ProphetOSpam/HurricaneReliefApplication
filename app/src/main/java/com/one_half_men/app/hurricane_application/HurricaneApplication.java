@@ -35,18 +35,45 @@ public class HurricaneApplication {
 
     private static final HurricaneApplication INSTANCE = new HurricaneApplication();
 
-    @Getter
-    private Optional<User> loggedInUser = Optional.empty();
+    private @Getter Optional<User> loggedInUser = Optional.empty();
+    private @Getter Optional<Key<User>> loggedInUserKey = Optional.empty();
+
+    private UserDb userDb;
+    private RequestDb requestDb;
+    private ShelterDb shelterDb;
+    private HurricaneDb hurricaneDb;
 
     public static HurricaneApplication getInstance() {
         return INSTANCE;
     }
 
+    public HurricaneApplication() {
+        userDb = UserDb.getInstance();
+        requestDb = RequestDb.getInstance();
+        shelterDb = ShelterDb.getInstance();
+        hurricaneDb = HurricaneDb.getInstance();
+    }
+
+    public HurricaneApplication(UserDb userDb, RequestDb requestDb, ShelterDb shelterDb, HurricaneDb hurricaneDb) {
+        this.userDb = userDb;
+        this.requestDb = requestDb;
+        this.shelterDb = shelterDb;
+        this.hurricaneDb = hurricaneDb;
+    }
+
+    public static HurricaneApplication mockApplication() {
+        return new HurricaneApplication(
+                new UserDb(),
+                new RequestDb(),
+                new ShelterDb(),
+                new HurricaneDb());
+    }
+
     // We cannot use the normal singleton instances if we want to test these, so the
     // instance is specified when calling the method
 
-    public Key<User> createAccount(UserDb db, String username, String password) throws AccountCreationError {
-        boolean usernameTaken = db.search(
+    public Key<User> createAccount(String username, String password) throws AccountCreationError {
+        boolean usernameTaken = userDb.search(
                 UserQuery.builder()
                         .username(Optional.of(username))
                         .build())
@@ -60,17 +87,17 @@ public class HurricaneApplication {
 
         User.UserBuilder builder = User.builder().username(username);
 
-        Optional<Authentication.Key> login = Authentication.Key.fromPassword(password);
+        Optional<Authentication.AuthKey> login = Authentication.AuthKey.fromPassword(password);
         if (login.isEmpty())
             throw new AccountCreationError.PasswordInvalid();
 
         builder.login(login.get());
 
-        return db.create(builder.build());
+        return userDb.create(builder.build());
     }
 
-    public User login(UserDb db, String username, String password) throws AccountLoginError {
-        Set<Key<User>> results = db.search(
+    public Key<User> login(String username, String password) throws AccountLoginError {
+        Set<Key<User>> results = userDb.search(
                 UserQuery.builder()
                         .username(Optional.of(username))
                         .build());
@@ -80,7 +107,7 @@ public class HurricaneApplication {
             throw new AccountLoginError.NoAccountFoundError();
 
         Key<User> key = first.get();
-        User user = db.get(key);
+        User user = userDb.get(key);
 
         boolean passwordCorrect = user.getLogin().checkPassword(password);
 
@@ -88,11 +115,13 @@ public class HurricaneApplication {
             throw new AccountLoginError.WrongPasswordError();
 
         loggedInUser = Optional.of(user);
-        return user;
+        loggedInUserKey = Optional.of(key);
+        return key;
     }
 
     public void logout() {
         loggedInUser = Optional.empty();
+        loggedInUserKey = Optional.empty();
     }
 
     public void addMember(Being being) {
@@ -103,81 +132,83 @@ public class HurricaneApplication {
         consumer.accept(user);
     }
 
-    public User getUser(UserDb db, Key<User> key) {
-        return db.get(key);
+    public User getUser(Key<User> key) {
+        return userDb.get(key);
     }
 
-    public Set<Key<User>> searchUser(UserDb db, UserQuery query) {
-        return db.search(query);
+    public Set<Key<User>> searchUser(UserQuery query) {
+        return userDb.search(query);
     }
 
-    public Key<Request> createRequest(RequestDb db, Request request) {
-        return db.create(request);
+    public Key<Request> createRequest(Request request) {
+        return requestDb.create(request);
     }
 
     public void editRequest(Request request, Consumer<Request> consumer) throws PermissionsError {
-        if (!request.canEdit(loggedInUser.get())) {
+        if (!request.canEdit(loggedInUserKey.get())) {
             throw new PermissionsError();
         }
 
         consumer.accept(request);
     }
 
-    public Request getRequest(RequestDb db, Key<Request> key) {
-        return db.get(key);
+    public Request getRequest(Key<Request> key) {
+        return requestDb.get(key);
     }
 
-    public Set<Key<Request>> searchRequest(RequestDb db, RequestQuery query) {
-        return db.search(query);
+    public Set<Key<Request>> searchRequest(RequestQuery query) {
+        return requestDb.search(query);
     }
 
-    public void closeRequest(RequestDb db, Key<Request> key, CloseReason reason) {
-        db.get(key).close(reason);
+    public void closeRequest(Key<Request> key, CloseReason reason) {
+        requestDb.get(key).close(reason);
     }
 
-    public void claimProxyRequest(RequestDb db, Key<Request> key) {
-        db.get(key).claimProxy(loggedInUser.get());
+    public void claimProxyRequest(Key<Request> key) {
+        requestDb.get(key).claimProxy(loggedInUserKey.get());
+        loggedInUser.get().getOwnedRequests().add(key);
     }
 
-    public void addParticipantToRequest(RequestDb db, Key<Request> key) {
-        db.get(key).addParticipant(loggedInUser.get());
+    public void addParticipantToRequest(Key<Request> key) {
+        requestDb.get(key).addParticipant(loggedInUserKey.get());
+        loggedInUser.get().getParticipatingRequests().add(key);
     }
 
-    public Key<Shelter> createShelter(ShelterDb db, Shelter shelter) {
-        return db.create(shelter);
+    public Key<Shelter> createShelter(Shelter shelter) {
+        return shelterDb.create(shelter);
     }
 
-    public void editShelter(ShelterDb db, Shelter shelter, Consumer<Shelter> consumer) throws PermissionsError {
-        if (shelter.getOwner() != loggedInUser.get()) {
+    public void editShelter(Shelter shelter, Consumer<Shelter> consumer) throws PermissionsError {
+        if (userDb.get(shelter.getOwner()) != loggedInUser.get()) {
             throw new PermissionsError();
         }
 
         consumer.accept(shelter);
     }
 
-    public Shelter getShelter(ShelterDb db, Key<Shelter> key) {
-        return db.get(key);
+    public Shelter getShelter(Key<Shelter> key) {
+        return shelterDb.get(key);
     }
 
-    public Set<Key<Shelter>> searchShelter(ShelterDb db, ShelterQuery query) {
-        return db.search(query);
+    public Set<Key<Shelter>> searchShelter(ShelterQuery query) {
+        return shelterDb.search(query);
     }
 
-    public void removeShelter(ShelterDb db, Key<Shelter> key) throws PermissionsError {
-        Shelter shelter = getShelter(db, key);
+    public void removeShelter(Key<Shelter> key) throws PermissionsError {
+        Shelter shelter = getShelter(key);
 
-        if (shelter.getOwner() != loggedInUser.get()) {
+        if (userDb.get(shelter.getOwner()) != loggedInUser.get()) {
             throw new PermissionsError();
         }
 
-        db.remove(key);
+        shelterDb.remove(key);
     }
 
-    public Hurricane getHurricane(HurricaneDb db, Key<Hurricane> key) {
-        return db.get(key);
+    public Hurricane getHurricane(Key<Hurricane> key) {
+        return hurricaneDb.get(key);
     }
 
-    public Set<Key<Hurricane>> searchHurricane(HurricaneDb db, HurricaneQuery query) {
-        return db.search(query);
+    public Set<Key<Hurricane>> searchHurricane(HurricaneQuery query) {
+        return hurricaneDb.search(query);
     }
 }

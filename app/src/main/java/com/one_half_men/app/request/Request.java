@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.one_half_men.annotations.Query;
 import com.one_half_men.app.being.Being;
+import com.one_half_men.app.db.Key;
 import com.one_half_men.app.location.Location;
 import com.one_half_men.app.shelter.Resource;
 import com.one_half_men.app.user.Specialty;
@@ -26,10 +27,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 public class Request {
-    private @Setter User author;
-    private @Setter @Builder.Default Optional<User> owner = Optional.empty();
+    private @Setter Key<User> author;
+    private @Setter @Builder.Default Optional<Key<User>> owner = Optional.empty();
     private @Builder.Default Boolean proxy = false;
-    private @Builder.Default Set<User> participants = new HashSet<>();
+    private @Builder.Default Set<Key<User>> participants = new HashSet<>();
     private @Setter LocalDate date;
     private @Builder.Default Optional<CloseReason> closeReason = Optional.empty();
     private @Setter Location location;
@@ -39,11 +40,11 @@ public class Request {
     private @Builder.Default Set<Specialty> requiredSpecialties = new HashSet<>();
 
     /** @return If the user has permissions to edit this request */
-    public boolean canEdit(User user) {
-        return user.equals(author) || (owner.isPresent() && owner.get() == user);
+    public boolean canEdit(Key<User> user) {
+        return user.equals(author) || (owner.isPresent() && owner.get().equals(user));
     }
 
-    public boolean addParticipant(User user) {
+    public boolean addParticipant(Key<User> user) {
         return participants.add(user);
     }
 
@@ -53,7 +54,7 @@ public class Request {
      * @param user User claiming request as owner
      * @return If operation succeeded (no previous owner)
      */
-    public boolean claimProxy(User user) {
+    public boolean claimProxy(Key<User> user) {
         if (owner.isPresent() || !getProxy())
             return false;
 

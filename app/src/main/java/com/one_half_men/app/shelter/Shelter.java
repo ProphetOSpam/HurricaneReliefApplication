@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.one_half_men.annotations.Query;
+import com.one_half_men.app.db.Key;
 import com.one_half_men.app.location.Location;
 import com.one_half_men.app.user.User;
 
@@ -21,7 +22,7 @@ import lombok.ToString;
 @Getter
 @Query
 public class Shelter {
-    private @Setter User owner;
+    private @Setter Key<User> owner;
     private @Setter String name;
     private @Setter Location location;
     private @Builder.Default Set<Resource> resources = new HashSet<>();

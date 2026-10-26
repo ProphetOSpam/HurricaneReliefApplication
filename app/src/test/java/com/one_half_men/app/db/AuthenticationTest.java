@@ -37,7 +37,7 @@ public class AuthenticationTest {
         String[] correctPasswords = new String[] { "abcdefghi", "password", "BIhPaseord" };
 
         for (String correctPassword : correctPasswords) {
-            Authentication.Key key = Authentication.Key.fromPassword(correctPassword).get();
+            Authentication.AuthKey key = Authentication.AuthKey.fromPassword(correctPassword).get();
             assertFalse(key.checkPassword(wrongPassword));
             assertTrue(key.checkPassword(correctPassword));
         }

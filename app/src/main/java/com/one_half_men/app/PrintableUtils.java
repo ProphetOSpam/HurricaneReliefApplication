@@ -2,6 +2,7 @@ package com.one_half_men.app;
 
 import java.io.IOException;
 
+import com.one_half_men.app.hurricane_application.HurricaneApplication;
 import com.one_half_men.app.location.Location;
 import com.one_half_men.app.location.MapTools;
 import com.one_half_men.app.request.Request;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 /** Utility class for printing out common things */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PrintableUtils {
-    public static String fullRoute(Request request, Location start, Shelter shelter) {
+    public static String fullRoute(HurricaneApplication app, Request request, Location start, Shelter shelter) {
         try {
             StringBuilder sb = new StringBuilder();
 
@@ -24,7 +25,7 @@ public class PrintableUtils {
 
             sb.append(String.format(
                     "Family:\n%s\n%s\n",
-                    request.getAuthor().getPerson().toText(),
+                    app.getUser(request.getAuthor()).getPerson().toText(),
                     String.join(
                             "\n",
                             request.getBeings().stream().map(being -> being.toText()).toList())));

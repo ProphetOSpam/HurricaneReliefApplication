@@ -49,7 +49,7 @@ public class Authentication {
     @AllArgsConstructor
     @Getter
     @Json
-    public static class Key {
+    public static class AuthKey {
         /** 128-bit salt */
         private final byte[] salt;
 
@@ -73,7 +73,7 @@ public class Authentication {
          *
          * @return New key, empty if passsword in invalid
          */
-        public static Optional<Authentication.Key> fromPassword(String password) {
+        public static Optional<Authentication.AuthKey> fromPassword(String password) {
             if (!Password.isValid(password))
                 return Optional.empty();
 
@@ -85,7 +85,7 @@ public class Authentication {
 
             byte[] hash = DIGEST.digest();
 
-            return Optional.of(new Authentication.Key(salt, hash));
+            return Optional.of(new Authentication.AuthKey(salt, hash));
         }
 
         /**
@@ -97,7 +97,7 @@ public class Authentication {
             if (!Password.isValid(password))
                 return false;
 
-            MessageDigest digest = Authentication.Key.DIGEST;
+            MessageDigest digest = Authentication.AuthKey.DIGEST;
 
             digest.update(salt);
             digest.update(password.getBytes(ASCII));

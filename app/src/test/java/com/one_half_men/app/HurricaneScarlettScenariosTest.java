@@ -23,6 +23,7 @@ import com.one_half_men.app.being.Person;
 import com.one_half_men.app.being.PhoneNumber;
 import com.one_half_men.app.being.SpecialNeed;
 import com.one_half_men.app.being.Species;
+import com.one_half_men.app.db.HurricaneDb;
 import com.one_half_men.app.db.Key;
 import com.one_half_men.app.db.RequestDb;
 import com.one_half_men.app.db.ShelterDb;
@@ -50,18 +51,35 @@ public class HurricaneScarlettScenariosTest {
     private static final UserDb USER_DB = new UserDb();
     private static final RequestDb REQUEST_DB = new RequestDb();
     private static final ShelterDb SHELTER_DB = new ShelterDb();
+    private static final HurricaneDb HURRICANE_DB = new HurricaneDb();
 
-    private static final HurricaneApplication DELL_APP = new HurricaneApplication();
+    private static final HurricaneApplication DELL_APP = new HurricaneApplication(
+            USER_DB,
+            REQUEST_DB,
+            SHELTER_DB,
+            HURRICANE_DB);
 
-    private static final HurricaneApplication ROSA_APP = new HurricaneApplication();
+    private static final HurricaneApplication ROSA_APP = new HurricaneApplication(
+            USER_DB,
+            REQUEST_DB,
+            SHELTER_DB,
+            HURRICANE_DB);
+
     private static final Address ROSA_ADDRESS = new Address("8 Ropemakers Ln", "Charleston", State.SOUTH_CAROLINA,
             Optional.of(new ZipCode("29401")));
 
     private static Request matchedRosaRequest;
+    private static Key<Request> matchedRosaRequestKey;
     private static Shelter matchedRosaShelter;
 
-    private static final HurricaneApplication FELIX_APP = new HurricaneApplication();
-    private static final Address FELIX_SHELTER_ADDRESS = new Address("40 Tradd St", "Charleston", State.SOUTH_CAROLINA,
+    private static final HurricaneApplication FELIX_APP = new HurricaneApplication(
+            USER_DB,
+            REQUEST_DB,
+            SHELTER_DB,
+            HURRICANE_DB);
+
+    private static final Address FELIX_SHELTER_ADDRESS = new Address("40 Tradd St", "Charleston",
+            State.SOUTH_CAROLINA,
             Optional.of(new ZipCode("29401")));
 
     private static final String SLUMBUM_USER = "lordSlumbum";
@@ -71,47 +89,41 @@ public class HurricaneScarlettScenariosTest {
     static void init() throws AccountCreationError, AccountLoginError, IOException {
         final String ROSA_USER = "rosa";
 
-        HurricaneApplication.getInstance().createAccount(
-                USER_DB,
+        ROSA_APP.createAccount(
                 ROSA_USER,
                 "password");
 
-        ROSA_APP.login(USER_DB, ROSA_USER, "password");
+        ROSA_APP.login(ROSA_USER, "password");
         User rosa = ROSA_APP.getLoggedInUser().get();
 
         rosa.getSpecialties().add(new Specialty.Transportation(4, Set.of(new Species("dog"))));
         rosa.setLocation(ROSA_ADDRESS);
 
         final String FELIX_USER = "felix";
-        HurricaneApplication.getInstance().createAccount(
-                USER_DB,
+        FELIX_APP.createAccount(
                 FELIX_USER,
                 "password");
 
-        FELIX_APP.login(USER_DB, FELIX_USER, "password");
-        User felix = FELIX_APP.getLoggedInUser().get();
+        Key<User> felixKey = FELIX_APP.login(FELIX_USER, "password");
 
-        slumbumKey = HurricaneApplication.getInstance().createAccount(
-                USER_DB,
+        slumbumKey = FELIX_APP.createAccount(
                 SLUMBUM_USER,
                 "password");
 
         User slumbum = USER_DB.get(slumbumKey);
 
-        Shelter felixShelter = Shelter.builder()
+        Key<Shelter> felixShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("Felix House")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of(new Species("dog"))),
                         new Resource.MedicalStaff(),
                         new Resource.AnimalCapacity(1),
                         new Resource.HumanCapacity(3)))
-                .owner(felix)
+                .owner(felixKey)
                 .location(FELIX_SHELTER_ADDRESS)
-                .build();
+                .build());
 
-        Key<Shelter> felixShelterKey = SHELTER_DB.create(felixShelter);
-
-        felix.getOwnedShelters().add(felixShelter);
+        FELIX_APP.getLoggedInUser().get().getOwnedShelters().add(felixShelterKey);
 
         Key<Shelter> noAnimalShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("No Animals")
@@ -122,7 +134,7 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(10)))
                 .location(new Address("194 W Poplar St", "Charleston", State.SOUTH_CAROLINA,
                         Optional.of(new ZipCode("29403"))))
-                .owner(slumbum).build());
+                .owner(slumbumKey).build());
 
         Key<Shelter> hilbertShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("The Grand Hilbert Hotel")
@@ -133,7 +145,7 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(100)))
                 .location(new Address("226 Gordon St", "Charleston", State.SOUTH_CAROLINA,
                         Optional.of(new ZipCode("29403"))))
-                .owner(slumbum).build());
+                .owner(slumbumKey).build());
 
         Key<Shelter> newYorkCityShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("New York City Alleyway")
@@ -144,7 +156,7 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(10)))
                 .location(new Address("1 Elmwood Ave", "Charleston", State.SOUTH_CAROLINA,
                         Optional.of(new ZipCode("29403"))))
-                .owner(slumbum).build());
+                .owner(slumbumKey).build());
 
         Key<Shelter> noHumanShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("No Humans")
@@ -155,7 +167,7 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(0)))
                 .location(new Address("12 Perry St", "Charleston", State.SOUTH_CAROLINA,
                         Optional.of(new ZipCode("29403"))))
-                .owner(slumbum).build());
+                .owner(slumbumKey).build());
 
         Key<Shelter> geminiShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("Gemini Shelter")
@@ -166,7 +178,7 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(12)))
                 .location(new Address("3 Murphy Ct", "Charleston", State.SOUTH_CAROLINA,
                         Optional.of(new ZipCode("29403"))))
-                .owner(slumbum).build());
+                .owner(slumbumKey).build());
 
         Key<Shelter> anotherShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("Another Charleston Shelter")
@@ -177,7 +189,7 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(12)))
                 .location(new Address("41 Smith St", "Charleston", State.SOUTH_CAROLINA,
                         Optional.of(new ZipCode("29401"))))
-                .owner(slumbum).build());
+                .owner(slumbumKey).build());
 
         Key<Shelter> frenchShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("French Shelter")
@@ -188,7 +200,7 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(420)))
                 .location(new Address("17 Chalmers St", "Charleston", State.SOUTH_CAROLINA,
                         Optional.of(new ZipCode("29401"))))
-                .owner(slumbum).build());
+                .owner(slumbumKey).build());
 
         Key<Shelter> sjelterShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("The Sjelter")
@@ -199,7 +211,7 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(7)))
                 .location(new Address("35 Poinsett St", "Charleston", State.SOUTH_CAROLINA,
                         Optional.of(new ZipCode("29403"))))
-                .owner(slumbum).build());
+                .owner(slumbumKey).build());
 
         Key<Shelter> finalShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("The Final Shelter")
@@ -210,11 +222,11 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(26)))
                 .location(new Address("8 Murray Blvd", "Charleston", State.SOUTH_CAROLINA,
                         Optional.of(new ZipCode("29403"))))
-                .owner(slumbum).build());
+                .owner(slumbumKey).build());
 
         REQUEST_DB.create(Request.builder()
-                .author(slumbum)
-                .owner(Optional.of(slumbum))
+                .author(slumbumKey)
+                .owner(Optional.of(slumbumKey))
                 .beings(Set.of(
                         new Animal(
                                 "Rabies",
@@ -231,8 +243,8 @@ public class HurricaneScarlettScenariosTest {
                 .build());
 
         REQUEST_DB.create(Request.builder()
-                .author(slumbum)
-                .owner(Optional.of(slumbum))
+                .author(slumbumKey)
+                .owner(Optional.of(slumbumKey))
                 .date(LocalDate.now())
                 .location(SHELTER_DB.get(hilbertShelterKey).getLocation())
                 .description(
@@ -240,8 +252,8 @@ public class HurricaneScarlettScenariosTest {
                 .build());
 
         REQUEST_DB.create(Request.builder()
-                .author(slumbum)
-                .owner(Optional.of(slumbum))
+                .author(slumbumKey)
+                .owner(Optional.of(slumbumKey))
                 .date(LocalDate.now())
                 .location(SHELTER_DB.get(finalShelterKey).getLocation())
                 .requiredResources(Set.of(new Resource.Custom("Water")))
@@ -250,8 +262,8 @@ public class HurricaneScarlettScenariosTest {
                 .build());
 
         REQUEST_DB.create(Request.builder()
-                .author(slumbum)
-                .owner(Optional.of(slumbum))
+                .author(slumbumKey)
+                .owner(Optional.of(slumbumKey))
                 .date(LocalDate.now())
                 .location(SHELTER_DB.get(sjelterShelterKey).getLocation())
                 .requiredResources(Set.of(new Resource.Custom("Portable Generator")))
@@ -260,8 +272,8 @@ public class HurricaneScarlettScenariosTest {
                 .build());
 
         REQUEST_DB.create(Request.builder()
-                .author(slumbum)
-                .owner(Optional.of(slumbum))
+                .author(slumbumKey)
+                .owner(Optional.of(slumbumKey))
                 .date(LocalDate.now())
                 .location(SHELTER_DB.get(frenchShelterKey).getLocation())
                 .description(
@@ -269,8 +281,8 @@ public class HurricaneScarlettScenariosTest {
                 .build());
 
         REQUEST_DB.create(Request.builder()
-                .author(slumbum)
-                .owner(Optional.of(slumbum))
+                .author(slumbumKey)
+                .owner(Optional.of(slumbumKey))
                 .date(LocalDate.now())
                 .location(SHELTER_DB.get(geminiShelterKey).getLocation())
                 .requiredResources(Set.of(new Resource.Custom("Food")))
@@ -301,15 +313,15 @@ public class HurricaneScarlettScenariosTest {
     void createTheReliefRequest() throws AccountCreationError, AccountLoginError {
         String DELL_USER = "sophies_father_dell";
 
-        HurricaneApplication.getInstance().createAccount(
-                USER_DB,
+        Key<User> dellKey = DELL_APP.createAccount(
                 DELL_USER,
                 "password");
 
-        DELL_APP.login(USER_DB, DELL_USER, "password");
+        DELL_APP.login(DELL_USER, "password");
 
         // Sophie's Father
         User dell = DELL_APP.getLoggedInUser().get();
+
         dell.setLocation(Address.builder()
                 .streetAddress("8 St Michaels Alley")
                 .city("Columbia")
@@ -348,8 +360,8 @@ public class HurricaneScarlettScenariosTest {
                 new Species("Miniature Schnauzer (Dog)")));
 
         REQUEST_DB.create(Request.builder()
-                .author(dell)
-                .owner(Optional.of(dell))
+                .author(dellKey)
+                .owner(Optional.of(dellKey))
                 .beings(dell.getFamily())
                 .date(LocalDate.now())
                 .location(dell.getLocation())
@@ -371,14 +383,14 @@ public class HurricaneScarlettScenariosTest {
                 .requiredSpecialties(Optional.of(rosa.getSpecialties()))
                 .build();
 
-        matchedRosaRequest = ROSA_APP.searchRequest(REQUEST_DB, query).stream().map(REQUEST_DB::get).findFirst().get();
-        matchedRosaRequest.addParticipant(rosa);
+        matchedRosaRequestKey = ROSA_APP.searchRequest(query).stream().findFirst().get();
+        matchedRosaRequest = ROSA_APP.getRequest(matchedRosaRequestKey);
     }
 
     @Test
     @Order(2)
     void FindAShelterAndAssignTheRequest() {
-        User rosa = ROSA_APP.getLoggedInUser().get();
+        Key<User> rosaKey = ROSA_APP.getLoggedInUserKey().get();
 
         ShelterQuery query = ShelterQuery.builder()
                 .resources(Optional.of(Set.of(
@@ -388,9 +400,9 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(3))))
                 .build();
 
-        matchedRosaShelter = ROSA_APP.searchShelter(SHELTER_DB, query).stream().map(SHELTER_DB::get).findFirst().get();
+        matchedRosaShelter = ROSA_APP.searchShelter(query).stream().map(SHELTER_DB::get).findFirst().get();
 
-        matchedRosaRequest.addParticipant(rosa);
+        ROSA_APP.addParticipantToRequest(matchedRosaRequestKey);
 
         System.out.println(matchedRosaShelter);
     }
@@ -400,7 +412,8 @@ public class HurricaneScarlettScenariosTest {
     void exportTheTripInformation() throws IOException {
         User rosa = ROSA_APP.getLoggedInUser().get();
 
-        String out = PrintableUtils.fullRoute(matchedRosaRequest, rosa.getLocation(), matchedRosaShelter);
+        String out = PrintableUtils.fullRoute(ROSA_APP, ROSA_APP.getRequest(matchedRosaRequestKey), rosa.getLocation(),
+                matchedRosaShelter);
         System.out.println(out);
 
         try (FileWriter writer = new FileWriter("out.txt")) {
@@ -419,14 +432,15 @@ public class HurricaneScarlettScenariosTest {
         // Rosa can't close Dell's request
         assertThrows(PermissionsError.class, () -> {
             ROSA_APP.editRequest(
-                    matchedRosaRequest,
-                    request -> request.close(CloseReason.resolved("Family has been checked into a shelter")));
+                    ROSA_APP.getRequest(matchedRosaRequestKey),
+                    request -> request.close(CloseReason
+                            .resolved("Family has been checked into a shelter")));
         });
 
         System.err.printf(
                 "User %s does not have permission to edit a request owned by %s\n",
                 rosa.getUsername(),
-                matchedRosaRequest.getOwner().get().getUsername());
+                ROSA_APP.getUser(matchedRosaRequest.getOwner().get()).getUsername());
 
         System.out.println("Dell tries to close the request");
 
@@ -447,7 +461,8 @@ public class HurricaneScarlettScenariosTest {
     void CheckTheFamilyIntoTheShelter() throws PermissionsError {
         System.out.println("\nFelix views his shelters");
 
-        Shelter shelter = FELIX_APP.getLoggedInUser().get().getOwnedShelters().stream().findFirst().get();
+        Shelter shelter = SHELTER_DB
+                .get(FELIX_APP.getLoggedInUser().get().getOwnedShelters().stream().findFirst().get());
 
         System.out.printf("Shelter name: %s\n", shelter.getName());
         System.out.printf("Shelter location: %s\n", shelter.getLocation().toText());
