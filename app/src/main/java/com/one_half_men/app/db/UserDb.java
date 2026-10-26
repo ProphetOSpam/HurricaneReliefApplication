@@ -24,7 +24,7 @@ public class UserDb extends Database<User> {
 
     private static UserDb instance;
 
-    public UserDb getInstance() {
+    public static UserDb getInstance() {
         if (instance == null) {
             instance = DataReader.readDatabase(type(), UserDb::new, new File(Constants.USER_DB));
         }

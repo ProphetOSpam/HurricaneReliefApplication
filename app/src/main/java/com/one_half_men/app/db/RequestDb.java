@@ -25,7 +25,7 @@ public class RequestDb extends Database<Request> {
 
     private static RequestDb instance;
 
-    public RequestDb getInstance() {
+    public static RequestDb getInstance() {
         if (instance == null) {
             instance = DataReader.readDatabase(type(), RequestDb::new, new File(Constants.SHELTER_DB));
         }

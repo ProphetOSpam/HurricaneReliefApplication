@@ -26,7 +26,7 @@ public class HurricaneDb extends Database<Hurricane> {
 
 	private static HurricaneDb instance;
 
-	public HurricaneDb getInstance() {
+	public static HurricaneDb getInstance() {
 		if (instance == null) {
 			instance = DataReader.readDatabase(type(), HurricaneDb::new, new File(Constants.SHELTER_DB));
 		}

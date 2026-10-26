@@ -25,7 +25,7 @@ public class ShelterDb extends Database<Shelter> {
 
     private static ShelterDb instance;
 
-    public ShelterDb getInstance() {
+    public static ShelterDb getInstance() {
         if (instance == null) {
             instance = DataReader.readDatabase(type(), ShelterDb::new, new File(Constants.SHELTER_DB));
         }
