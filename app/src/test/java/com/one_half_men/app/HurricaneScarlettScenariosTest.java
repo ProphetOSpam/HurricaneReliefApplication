@@ -382,14 +382,14 @@ public class HurricaneScarlettScenariosTest {
 
         dell.setPerson(new Person(
                 "Dell",
-                "Conagher",
+                "Carter",
                 LocalDate.of(1984, Month.APRIL, 22),
                 new ArrayList<>(),
                 new PhoneNumber("1", "864", "555-5555")));
 
         dell.getFamily().add(new Person(
                 "Sophie",
-                "Conagher",
+                "Carter",
                 LocalDate.of(2010, Month.DECEMBER, 25),
                 List.of(new SpecialNeed("Asthmatic",
                         "Requires an inhaler at times, must be kept near their person")),
@@ -398,14 +398,14 @@ public class HurricaneScarlettScenariosTest {
         // Sophie's Mother
         dell.getFamily().add(new Person(
                 "Carol",
-                "Conagher",
+                "Carter",
                 LocalDate.of(1985, 03, 06),
                 new ArrayList<>(),
                 new PhoneNumber("1", "864", "555-5556")));
 
         dell.getFamily().add(new Animal(
                 "Buddy",
-                "Conagher",
+                "Carter",
                 LocalDate.of(2021, Month.JANUARY, 27),
                 new ArrayList<>(),
                 new Species("Miniature Schnauzer (Dog)")));
