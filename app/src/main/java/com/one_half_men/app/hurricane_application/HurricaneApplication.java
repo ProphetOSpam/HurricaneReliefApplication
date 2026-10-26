@@ -99,8 +99,8 @@ public class HurricaneApplication {
         loggedInUser.get().getFamily().add(being);
     }
 
-    public void editUser(Consumer<User> consumer) throws PermissionsError {
-        consumer.accept(loggedInUser.get());
+    public void editUser(User user, Consumer<User> consumer) throws PermissionsError {
+        consumer.accept(user);
     }
 
     public User getUser(UserDb db, Key<User> key) {
@@ -147,9 +147,7 @@ public class HurricaneApplication {
         return db.create(shelter);
     }
 
-    public void editShelter(ShelterDb db, Key<Shelter> key, Consumer<Shelter> consumer) throws PermissionsError {
-        Shelter shelter = db.get(key);
-
+    public void editShelter(ShelterDb db, Shelter shelter, Consumer<Shelter> consumer) throws PermissionsError {
         if (shelter.getOwner() != loggedInUser.get()) {
             throw new PermissionsError();
         }
