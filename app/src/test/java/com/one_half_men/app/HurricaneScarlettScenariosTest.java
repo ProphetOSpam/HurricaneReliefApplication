@@ -66,7 +66,7 @@ public class HurricaneScarlettScenariosTest {
     private static Key<User> slumbumKey;
 
     @BeforeAll
-    static void init() throws AccountCreationError, AccountLoginError {
+    static void init() throws AccountCreationError, AccountLoginError, IOException {
         final String ROSA_USER = "rosa";
 
         HurricaneApplication.getInstance().createAccount(
@@ -271,6 +271,23 @@ public class HurricaneScarlettScenariosTest {
                 .description(
                         "I'm hungry!")
                 .build());
+
+        printDatabases();
+    }
+
+    private static void printDatabases() {
+        System.out.printf("""
+                User Database =  %s
+                ---
+
+                Request Database =  %s
+                ---
+
+                Shelter Database = %s
+                ---\n""",
+                UserDb.type().toJsonPretty(USER_DB.base),
+                RequestDb.type().toJsonPretty(REQUEST_DB.base),
+                ShelterDb.type().toJsonPretty(SHELTER_DB.base));
     }
 
     @Test
