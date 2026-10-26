@@ -22,13 +22,10 @@ relief.
 [Sequence Diagram 2: Creating a Shelter](./docs/uml-sequence-diagram2.pdf)
 
 # Project Board
-TODO
-
-# Prototype
-TODO
+[Scrum Board](https://github.com/users/ProphetOSpam/projects/3)
 
 # Presentation
-TODO
+[Video](https://www.youtube.com/watch?v=vfaOdG-o_30)
 
 # Our Team
 
