@@ -299,7 +299,7 @@ public class HurricaneScarlettScenariosTest {
                 "Conagher",
                 LocalDate.of(1984, Month.APRIL, 22),
                 new ArrayList<>(),
-                new PhoneNumber("864", "555", "5555")));
+                new PhoneNumber("1", "864", "555-5555")));
 
         dell.getFamily().add(new Person(
                 "Sophie",
@@ -307,7 +307,7 @@ public class HurricaneScarlettScenariosTest {
                 LocalDate.of(2010, Month.DECEMBER, 25),
                 List.of(new SpecialNeed("Asthmatic",
                         "Requires an inhaler at times, must be kept near their person")),
-                new PhoneNumber("864", "555", "5554")));
+                new PhoneNumber("1", "864", "555-5554")));
 
         // Sophie's Mother
         dell.getFamily().add(new Person(
@@ -315,7 +315,7 @@ public class HurricaneScarlettScenariosTest {
                 "Conagher",
                 LocalDate.of(1985, 03, 06),
                 new ArrayList<>(),
-                new PhoneNumber("864", "555", "5556")));
+                new PhoneNumber("1", "864", "555-5556")));
 
         dell.getFamily().add(new Animal(
                 "Buddy",
