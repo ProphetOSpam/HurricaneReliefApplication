@@ -116,7 +116,7 @@ public class HurricaneApplication {
     }
 
     public void editRequest(Request request, Consumer<Request> consumer) throws PermissionsError {
-        if (request.getEditor() != loggedInUser.get()) {
+        if (!request.canEdit(loggedInUser.get())) {
             throw new PermissionsError();
         }
 

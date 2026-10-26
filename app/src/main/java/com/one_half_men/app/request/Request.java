@@ -38,8 +38,9 @@ public class Request {
     private @Builder.Default Set<Resource> requiredResources = new HashSet<>();
     private @Builder.Default Set<Specialty> requiredSpecialties = new HashSet<>();
 
-    public User getEditor() {
-        return owner.isPresent() ? owner.get() : author;
+    /** @return If the user has permissions to edit this request */
+    public boolean canEdit(User user) {
+        return user.equals(author) || (owner.isPresent() && owner.get() == user);
     }
 
     public boolean addParticipant(User user) {
@@ -53,15 +54,23 @@ public class Request {
      * @return If operation succeeded (no previous owner)
      */
     public boolean claimProxy(User user) {
-        if (owner.isPresent() || !getProxy()) return false;
+        if (owner.isPresent() || !getProxy())
+            return false;
+
         owner = Optional.of(user);
         return true;
     }
 
+    /**
+     * Closes the request for the specified reason
+     *
+     * @param reason Reason for closing the request
+     */
     public void close(CloseReason reason) {
         closeReason = Optional.of(reason);
     }
 
+    /** @return If the request has been closed */
     public boolean isClosed() {
         return closeReason.isPresent();
     }

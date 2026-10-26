@@ -426,7 +426,7 @@ public class HurricaneScarlettScenariosTest {
         System.err.printf(
                 "User %s does not have permission to edit a request owned by %s\n",
                 rosa.getUsername(),
-                matchedRosaRequest.getEditor().getUsername());
+                matchedRosaRequest.getOwner().get().getUsername());
 
         System.out.println("Dell tries to close the request");
 
