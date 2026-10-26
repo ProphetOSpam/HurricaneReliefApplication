@@ -445,8 +445,7 @@ public class HurricaneScarlettScenariosTest {
     @Test
     @Order(5)
     void CheckTheFamilyIntoTheShelter() throws PermissionsError {
-        System.out.println();
-        System.out.println("Felix views his shelters");
+        System.out.println("\nFelix views his shelters");
 
         Shelter shelter = FELIX_APP.getLoggedInUser().get().getOwnedShelters().stream().findFirst().get();
 
@@ -469,9 +468,7 @@ public class HurricaneScarlettScenariosTest {
 
         // -- Update shelters
 
-        System.out.println();
-        System.out.println("Felix updates his shelters");
-        System.out.println();
+        System.out.println("\nFelix updates his shelters\n");
 
         humanCapacity.change(3);
         animalCapacity.change(1);
