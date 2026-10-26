@@ -7,12 +7,14 @@ import com.one_half_men.annotations.Query;
 import com.one_half_men.app.location.Location;
 import com.one_half_men.app.user.User;
 
+import io.avaje.jsonb.Json;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+@Json
 @ToString
 @AllArgsConstructor
 @Builder
