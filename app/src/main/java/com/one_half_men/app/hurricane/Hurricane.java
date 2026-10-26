@@ -1,6 +1,6 @@
 package com.one_half_men.app.hurricane;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
@@ -20,8 +20,8 @@ import lombok.Setter;
 @Builder
 public class Hurricane {
     private @Getter @Setter String name;
-    private @Getter @Setter Date formed;
-    private @Getter @Setter Optional<Date> dissipated;
+    private @Getter @Setter LocalDate formed;
+    private @Getter @Setter Optional<LocalDate> dissipated;
     private @Getter Set<State> affectedAreas;
 
     public boolean isAffected(Location location) {
