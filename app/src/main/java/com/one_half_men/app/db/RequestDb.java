@@ -34,6 +34,6 @@ public class RequestDb extends Database<Request> {
     }
 
     public static JsonType<BaseDatabase<Request>> type() {
-        return JsonbInstance.instance.type(Types.newParameterizedType(Database.class, Request.class));
+        return JsonbInstance.instance.type(Types.newParameterizedType(BaseDatabase.class, Request.class));
     }
 }
