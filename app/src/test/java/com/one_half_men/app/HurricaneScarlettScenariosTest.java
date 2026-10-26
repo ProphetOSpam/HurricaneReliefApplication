@@ -339,23 +339,6 @@ public class HurricaneScarlettScenariosTest {
                 .description(
                         "I'm hungry!")
                 .build());
-
-        printDatabases();
-    }
-
-    private static void printDatabases() {
-        System.out.printf("""
-                User Database =  %s
-                ---
-
-                Request Database =  %s
-                ---
-
-                Shelter Database = %s
-                ---\n""",
-                UserDb.type().toJsonPretty(USER_DB.base),
-                RequestDb.type().toJsonPretty(REQUEST_DB.base),
-                ShelterDb.type().toJsonPretty(SHELTER_DB.base));
     }
 
     @Test
@@ -410,7 +393,7 @@ public class HurricaneScarlettScenariosTest {
                 new ArrayList<>(),
                 new Species("Miniature Schnauzer (Dog)")));
 
-        REQUEST_DB.create(Request.builder()
+        DELL_APP.createRequest(Request.builder()
                 .author(dellKey)
                 .owner(Optional.of(dellKey))
                 .beings(dell.getFamily())
@@ -439,6 +422,8 @@ public class HurricaneScarlettScenariosTest {
 
         matchedRosaRequestKey = ROSA_APP.searchRequest(query).stream().findFirst().get();
         matchedRosaRequest = ROSA_APP.getRequest(matchedRosaRequestKey);
+
+        System.out.printf("Rosa Request: %s\n", matchedRosaRequest);
     }
 
     @Test
@@ -473,9 +458,13 @@ public class HurricaneScarlettScenariosTest {
     void exportTheTripInformation() throws IOException {
         User rosa = ROSA_APP.getLoggedInUser().get();
 
-        String out = PrintableUtils.fullRoute(ROSA_APP, ROSA_APP.getRequest(matchedRosaRequestKey), rosa.getLocation(),
+        String out = PrintableUtils.fullRoute(
+                ROSA_APP,
+                ROSA_APP.getRequest(matchedRosaRequestKey),
+                rosa.getLocation(),
                 matchedRosaShelter);
-        System.out.println(out);
+
+        System.out.println("Exporting trip information to a text file");
 
         try (FileWriter writer = new FileWriter(new File("../json_test/print_out.txt"))) {
             writer.write(out);
