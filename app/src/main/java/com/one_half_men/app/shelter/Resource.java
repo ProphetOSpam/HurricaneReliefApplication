@@ -22,29 +22,37 @@ public sealed interface Resource {
         Set<Species> pets;
     }
 
+    public static interface Remaining {
+        public int remaining();
+    }
+
     @Data
-    public static sealed abstract class Capacity implements Resource {
+    public static final class AnimalCapacity implements Resource, Remaining {
         int current;
         int max;
 
-        public Capacity(int max) {
+        public AnimalCapacity(int max) {
             this.max = max;
         }
 
+        @Override
         public int remaining() {
             return max - current;
         }
     }
 
-    public static final class AnimalCapacity extends Capacity {
-        public AnimalCapacity(int max) {
-            super(max);
-        }
-    }
+    @Data
+    public static final class HumanCapacity implements Resource, Remaining {
+        int current;
+        int max;
 
-    public static final class HumanCapacity extends Capacity {
         public HumanCapacity(int max) {
-            super(max);
+            this.max = max;
+        }
+
+        @Override
+        public int remaining() {
+            return max - current;
         }
     }
 
