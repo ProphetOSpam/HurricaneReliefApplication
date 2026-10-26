@@ -38,6 +38,8 @@ import com.one_half_men.app.request.CloseReason;
 import com.one_half_men.app.request.Request;
 import com.one_half_men.app.request.RequestQuery;
 import com.one_half_men.app.shelter.Resource;
+import com.one_half_men.app.shelter.Resource.AnimalCapacity;
+import com.one_half_men.app.shelter.Resource.HumanCapacity;
 import com.one_half_men.app.shelter.Shelter;
 import com.one_half_men.app.shelter.ShelterQuery;
 import com.one_half_men.app.user.Specialty;
@@ -96,7 +98,7 @@ public class HurricaneScarlettScenariosTest {
 
         User slumbum = USER_DB.get(slumbumKey);
 
-        Key<Shelter> felixShelterKey = SHELTER_DB.create(Shelter.builder()
+        Shelter felixShelter = Shelter.builder()
                 .name("Felix House")
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of(new Species("dog"))),
@@ -105,7 +107,11 @@ public class HurricaneScarlettScenariosTest {
                         new Resource.HumanCapacity(3)))
                 .owner(felix)
                 .location(FELIX_SHELTER_ADDRESS)
-                .build());
+                .build();
+
+        Key<Shelter> felixShelterKey = SHELTER_DB.create(felixShelter);
+
+        felix.getOwnedShelters().add(felixShelter);
 
         Key<Shelter> noAnimalShelterKey = SHELTER_DB.create(Shelter.builder()
                 .name("No Animals")
@@ -123,7 +129,7 @@ public class HurricaneScarlettScenariosTest {
                 .resources(Set.of(
                         new Resource.AllowedPets(Set.of()),
                         new Resource.MedicalStaff(),
-                        new Resource.AnimalCapacity(100),
+                        new Resource.AnimalCapacity(10),
                         new Resource.HumanCapacity(100)))
                 .location(new Address("226 Gordon St", "Charleston", State.SOUTH_CAROLINA,
                         Optional.of(new ZipCode("29403"))))
@@ -404,7 +410,10 @@ public class HurricaneScarlettScenariosTest {
     @Test
     @Order(4)
     void demonstrateRolePermisssions() throws PermissionsError {
+        User dell = DELL_APP.getLoggedInUser().get();
         User rosa = ROSA_APP.getLoggedInUser().get();
+
+        System.out.println("Rosa tries to close the request");
 
         // Rosa can't close Dell's request
         assertThrows(PermissionsError.class, () -> {
@@ -414,15 +423,67 @@ public class HurricaneScarlettScenariosTest {
         });
 
         System.err.printf(
-                "User %s does not have permission to edit Request: %s",
+                "User %s does not have permission to edit a request owned by %s\n",
                 rosa.getUsername(),
-                matchedRosaRequest.toString());
+                matchedRosaRequest.getEditor().getUsername());
+
+        System.out.println("Dell tries to close the request");
 
         // Dell *can* close their request
         DELL_APP.editRequest(
                 matchedRosaRequest,
                 request -> request.close(CloseReason.resolved("We've been checked into a shelter")));
 
+        System.out.printf("User %s has successfully closed the request with the message: %s\n",
+                dell.getUsername(),
+                matchedRosaRequest.getCloseReason().get().getMessage());
+
         assertTrue(matchedRosaRequest.isClosed());
+    }
+
+    @Test
+    @Order(5)
+    void CheckTheFamilyIntoTheShelter() throws PermissionsError {
+        System.out.println();
+        System.out.println("Felix views his shelters");
+
+        Shelter shelter = FELIX_APP.getLoggedInUser().get().getOwnedShelters().stream().findFirst().get();
+
+        System.out.printf("Shelter name: %s\n", shelter.getName());
+        System.out.printf("Shelter location: %s\n", shelter.getLocation().toText());
+
+        HumanCapacity humanCapacity = (HumanCapacity) shelter.getResources().stream()
+                .filter(resource -> resource instanceof HumanCapacity).findFirst().get();
+
+        System.out.printf("Total Capacity: %d\n", humanCapacity.getMax());
+        System.out.printf("Current Capacity: %d\n", humanCapacity.getCurrent());
+        System.out.printf("Remaining Capacity: %d\n", humanCapacity.remaining());
+
+        AnimalCapacity animalCapacity = (AnimalCapacity) shelter.getResources().stream()
+                .filter(resource -> resource instanceof AnimalCapacity).findFirst().get();
+
+        System.out.printf("Total Pet Capacity: %d\n", animalCapacity.getMax());
+        System.out.printf("Current Pet Capacity: %d\n", animalCapacity.getCurrent());
+        System.out.printf("Remaining Pet Capacity: %d\n", animalCapacity.remaining());
+
+        // -- Update shelters
+
+        System.out.println();
+        System.out.println("Felix updates his shelters");
+        System.out.println();
+
+        humanCapacity.change(3);
+        animalCapacity.change(1);
+
+        System.out.println("updated values");
+
+        System.out.printf("Total Capacity: %d\n", humanCapacity.getMax());
+        System.out.printf("Current Capacity: %d\n", humanCapacity.getCurrent());
+        System.out.printf("Remaining Capacity: %d\n", humanCapacity.remaining());
+
+        System.out.printf("Total Pet Capacity: %d\n", animalCapacity.getMax());
+        System.out.printf("Current Pet Capacity: %d\n", animalCapacity.getCurrent());
+        System.out.printf("Remaining Pet Capacity: %d\n", animalCapacity.remaining());
+
     }
 }

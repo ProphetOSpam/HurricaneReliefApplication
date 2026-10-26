@@ -22,17 +22,38 @@ public sealed interface Resource {
         Set<Species> pets;
     }
 
-    public static interface Remaining {
+    public static interface Capacity {
+        /**
+         * Changes the value. If not in range, retains the original value
+         * 
+         * @return Whether the set value was in range or not
+         */
+        public boolean change(int value);
+
+        /**
+         * @return The remaining spots left
+         */
         public int remaining();
     }
 
     @Data
-    public static final class AnimalCapacity implements Resource, Remaining {
+    public static final class AnimalCapacity implements Resource, Capacity {
         int current;
         int max;
 
         public AnimalCapacity(int max) {
             this.max = max;
+        }
+
+        @Override
+        public boolean change(int value) {
+            int newCurrent = current + value;
+            if (0 < newCurrent && newCurrent <= max) {
+                current = newCurrent;
+                return true;
+            }
+
+            return false;
         }
 
         @Override
@@ -42,12 +63,23 @@ public sealed interface Resource {
     }
 
     @Data
-    public static final class HumanCapacity implements Resource, Remaining {
+    public static final class HumanCapacity implements Resource, Capacity {
         int current;
         int max;
 
         public HumanCapacity(int max) {
             this.max = max;
+        }
+
+        @Override
+        public boolean change(int value) {
+            int newCurrent = current + value;
+            if (0 < newCurrent && newCurrent <= max) {
+                current = newCurrent;
+                return true;
+            }
+
+            return false;
         }
 
         @Override
