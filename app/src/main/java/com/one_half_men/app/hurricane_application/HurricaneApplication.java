@@ -160,8 +160,8 @@ public class HurricaneApplication {
         return requestDb.search(query);
     }
 
-    public void closeRequest(Key<Request> key, CloseReason reason) {
-        requestDb.get(key).close(reason);
+    public void closeRequest(Key<Request> key, CloseReason reason) throws PermissionsError {
+        editRequest(requestDb.get(key), request -> request.close(reason));
     }
 
     public void claimProxyRequest(Key<Request> key) {
