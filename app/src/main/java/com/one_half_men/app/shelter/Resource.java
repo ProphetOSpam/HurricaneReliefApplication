@@ -23,22 +23,28 @@ public sealed interface Resource {
     }
 
     @Data
-    public static final class AnimalCapacity implements Resource {
+    public static sealed abstract class Capacity implements Resource {
         int current;
         int max;
 
-        public AnimalCapacity(int max) {
+        public Capacity(int max) {
             this.max = max;
+        }
+
+        public int remaining() {
+            return max - current;
         }
     }
 
-    @Data
-    public static final class HumanCapacity implements Resource {
-        int current;
-        int max;
+    public static final class AnimalCapacity extends Capacity {
+        public AnimalCapacity(int max) {
+            super(max);
+        }
+    }
 
+    public static final class HumanCapacity extends Capacity {
         public HumanCapacity(int max) {
-            this.max = max;
+            super(max);
         }
     }
 
