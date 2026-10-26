@@ -69,6 +69,10 @@ public enum State {
     WYOMING("WY"),
     ;
 
+    /**
+     * Abbreviation of the state.
+     * Example for South Carolina: {@code "SC"}
+     */
     private final String abbreviation;
 
     public static Optional<State> fromAbbreviation(String abbreviation) {

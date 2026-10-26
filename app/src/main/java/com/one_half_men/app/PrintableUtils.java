@@ -1,7 +1,6 @@
 package com.one_half_men.app;
 
 import java.io.IOException;
-import java.util.List;
 
 import com.one_half_men.app.location.Location;
 import com.one_half_men.app.location.MapTools;
@@ -11,6 +10,7 @@ import com.one_half_men.app.shelter.Shelter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/** Utility class for printing out common things */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PrintableUtils {
     public static String fullRoute(Request request, Location start, Shelter shelter) {
