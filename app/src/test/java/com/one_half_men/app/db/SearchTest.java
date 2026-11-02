@@ -18,6 +18,7 @@ import com.one_half_men.app.user.Role;
 import com.one_half_men.app.user.User;
 import com.one_half_men.app.user.UserQuery;
 
+// Author: Jayce
 public class SearchTest {
     @Test
     public void databaseSearchViaQuery() {
