@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.one_half_men.app.being.Animal;
@@ -22,9 +23,26 @@ import com.one_half_men.app.user.Role;
 import com.one_half_men.app.user.User;
 
 public class DatabaseTest {
+    public static final UserDb USER_DB = new UserDb();
+    public static Key<User> userKey;
+
+    @BeforeAll
+    public void init() {
+        User user = User.builder()
+                .person(new Person("firstName", "lastName", LocalDate.now(), List.of(),
+                        new PhoneNumber("1", "234", "5678910")))
+                .role(Role.CITIZEN)
+                .location(new Coordinates(0.0, 0.0))
+                .family(Set
+                        .of(new Animal("Bob", "Barker", LocalDate.of(2012, 1, 1), List.of(), new Species("Dog"))))
+                .build();
+
+        USER_DB.create(user);
+    }
+
     @Test
-    public void databaseRoundtripInMemory() throws IOException {
-        UserDb db = new UserDb();
+    public void insertAndDelete() {
+        // -- Insertion --
 
         User user = User.builder()
                 .person(new Person("firstName", "lastName", LocalDate.now(), List.of(),
@@ -35,21 +53,30 @@ public class DatabaseTest {
                         .of(new Animal("Bob", "Barker", LocalDate.of(2012, 1, 1), List.of(), new Species("Dog"))))
                 .build();
 
-        db.create(user);
+        userKey = USER_DB.create(user);
 
-        // In memory testing
-        {
-            StringWriter str = new StringWriter();
-            DataWriter.writeDatabase(UserDb.type(), db, str);
-            UserDb db2 = DataReader.readDatabase(UserDb.type(), UserDb::new, new StringReader(str.toString()));
-            assertEquals(db, db2);
-        }
+        assertEquals(USER_DB.get(userKey), user);
 
-        // Writing/Reading to file
-        {
-            DataWriter.writeDatabase(UserDb.type(), db);
-            UserDb db3 = DataReader.readDatabase(UserDb.type(), UserDb::new);
-            assertEquals(db, db3);
-        }
+        // -- Deletion --
+
+        USER_DB.remove(userKey);
+
+        assertEquals(USER_DB.get(userKey), null);
+    }
+
+    @Test
+    public void databaseRoundtripInMemory() throws IOException {
+        StringWriter str = new StringWriter();
+        DataWriter.writeDatabase(UserDb.type(), USER_DB, str);
+        UserDb db2 = DataReader.readDatabase(UserDb.type(), UserDb::new, new StringReader(str.toString()));
+        assertEquals(USER_DB, db2);
+    }
+
+    public void databaseRoundtripViaFile() throws IOException {
+
+        DataWriter.writeDatabase(UserDb.type(), USER_DB);
+        UserDb db3 = DataReader.readDatabase(UserDb.type(), UserDb::new);
+        assertEquals(USER_DB, db3);
+
     }
 }
