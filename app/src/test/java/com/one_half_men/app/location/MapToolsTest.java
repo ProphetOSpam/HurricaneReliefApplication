@@ -7,7 +7,9 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-// Author: Jayce
+/**
+ * @author Jayce Bak
+ */
 public class MapToolsTest {
     @Test
     public void addressToCoordinates() throws IOException, InterruptedException {
