@@ -27,7 +27,7 @@ public class DatabaseTest {
     public static Key<User> userKey;
 
     @BeforeAll
-    public void init() {
+    public static void init() {
         User user = User.builder()
                 .person(new Person("firstName", "lastName", LocalDate.now(), List.of(),
                         new PhoneNumber("1", "234", "5678910")))
