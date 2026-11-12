@@ -21,6 +21,9 @@ relief.
 
 [Sequence Diagram 2: Creating a Shelter](./docs/uml-sequence-diagram2.pdf)
 
+[Prototype](./docs/prototype.pdf)
+[Prototype Figma](https://www.figma.com/design/fqn00ke7HFEsVbDv4oDv2A/CSCE-247-Hurricane-App-Prototype?node-id=4-56&t=Y431yI9fNri8tzsi-1)
+
 # Project Board
 [Scrum Board](https://github.com/users/ProphetOSpam/projects/3)
 
