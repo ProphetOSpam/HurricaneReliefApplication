@@ -13,6 +13,11 @@ open module com.one_half_men.app {
     requires com.one_half_men.annotations;
     requires io.avaje.json.node;
 
+    requires MaterialFX;
+
+    requires fr.brouillard.oss.cssfx;
+    requires javafx.graphics;
+
     exports com.one_half_men.app;
     exports com.one_half_men.app.distance;
     exports com.one_half_men.app.location;
