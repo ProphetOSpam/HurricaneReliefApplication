@@ -18,6 +18,7 @@ import com.one_half_men.app.error.AccountLoginError;
 import com.one_half_men.app.error.PermissionsError;
 import com.one_half_men.app.hurricane.Hurricane;
 import com.one_half_men.app.hurricane.HurricaneQuery;
+import com.one_half_men.app.json.DataWriter;
 import com.one_half_men.app.request.CloseReason;
 import com.one_half_men.app.request.Request;
 import com.one_half_men.app.request.RequestQuery;
@@ -211,4 +212,8 @@ public class HurricaneApplication {
     public Set<Key<Hurricane>> searchHurricane(HurricaneQuery query) {
         return hurricaneDb.search(query);
     }
+
+	public void write() {
+        DataWriter.writeDatabase(UserDb.type(), userDb);
+	}
 }
