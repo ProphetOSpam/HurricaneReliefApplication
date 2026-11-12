@@ -10,6 +10,8 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
+import com.one_half_men.app.hurricane_application.HurricaneApplication;
+
 import fr.brouillard.oss.cssfx.CSSFX;
 import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
@@ -38,6 +40,13 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setTitle("Hurricane Application");
         stage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+
+        HurricaneApplication.getInstance().write();
     }
 
     public static void setRoot(String fxml) throws IOException {

@@ -1,6 +1,7 @@
 // In it's own package to avoid exporting everything
 package com.one_half_men.app.hurricane_application;
 
+import java.io.File;
 import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.Random;
@@ -18,6 +19,7 @@ import com.one_half_men.app.error.AccountLoginError;
 import com.one_half_men.app.error.PermissionsError;
 import com.one_half_men.app.hurricane.Hurricane;
 import com.one_half_men.app.hurricane.HurricaneQuery;
+import com.one_half_men.app.json.Constants;
 import com.one_half_men.app.json.DataWriter;
 import com.one_half_men.app.request.CloseReason;
 import com.one_half_men.app.request.Request;
@@ -213,7 +215,7 @@ public class HurricaneApplication {
         return hurricaneDb.search(query);
     }
 
-	public void write() {
-        DataWriter.writeDatabase(UserDb.type(), userDb);
-	}
+    public void write() {
+        DataWriter.writeDatabase(UserDb.type(), userDb, new File(Constants.USER_DB));
+    }
 }
