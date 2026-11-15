@@ -31,13 +31,16 @@ public class MapToolsTest {
         State brownState = MapTools.estimateState(brownCoords).get();
         assertEquals(State.TEXAS, brownState);
 
+        // Determined that it is best to "autocorrect" nonexistent addresseses based on API results
+        // While this example is an extreme, making it so even misspelled addresses don't return null will help users
         Address nonexistent = new Address(
             "1001 Avenida De Las Americas", 
             "Houston", 
-            State.ALASKA, 
+            State.ALABAMA, 
             Optional.of(new ZipCode("77010")));
         Coordinates nonexistentCoords = MapTools.estimateCoordinates(nonexistent);
-        assertEquals(null, nonexistentCoords);
+        State nonexistentState = MapTools.estimateState(nonexistentCoords).get();
+        assertEquals(State.ALABAMA, nonexistentState);
 
         Coordinates nullCoords = MapTools.estimateCoordinates(null);
         assertEquals(null, nullCoords);
@@ -46,18 +49,18 @@ public class MapToolsTest {
     @Test
     public void coordinatesToState() throws IOException, InterruptedException {
         Coordinates columbia = new Coordinates(34.00474300990445, -81.04420636514249);
-        State columbiaState = MapTools.estimateState(columbia).get();
-        assertEquals(State.SOUTH_CAROLINA, columbiaState);
+        Optional<State> columbiaState = MapTools.estimateState(columbia);
+        assertEquals(State.SOUTH_CAROLINA, columbiaState.get());
 
         Coordinates nullIsland = new Coordinates(0, 0);
-        State nullIslandState = MapTools.estimateState(nullIsland).get();
-        assertEquals(null, nullIslandState);
+        Optional<State> nullIslandState = MapTools.estimateState(nullIsland);
+        assertEquals(true, nullIslandState.isEmpty());
 
         Coordinates canada = new Coordinates(45.42348689869027, -75.70829624398654);
-        State canadaState = MapTools.estimateState(canada).get();
-        assertEquals(null, canadaState);
+        Optional<State> canadaState = MapTools.estimateState(canada);
+        assertEquals(true, canadaState.isEmpty());
 
-        State nullState = MapTools.estimateState(null).get();
-        assertEquals(null, nullState);
+        Optional<State> nullState = MapTools.estimateState(null);
+        assertEquals(true, nullState.isEmpty());
     }
 }

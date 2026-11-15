@@ -48,16 +48,20 @@ public class MapTools {
 
                 checkForApiKey();
 
-                String encodedAddress = URLEncoder.encode(
-                                address.toText(),
-                                StandardCharsets.UTF_8);
+                String encodedAddress;
+                try {
+                        encodedAddress = URLEncoder.encode(
+                                        address.toText(),
+                                        StandardCharsets.UTF_8);
+                } catch (NullPointerException e) {
+                        return null;
+                }
 
-                URI uri = URI.create(
-                                GEOCODING_URL
-                                                + "?api_key=" + apiKey
-                                                + "&text=" + encodedAddress
-                                                + "&boundary.country=USA"
-                                                + "&size=10");
+                URI uri = URI.create(GEOCODING_URL
+                                + "?api_key=" + apiKey
+                                + "&text=" + encodedAddress
+                                + "&boundary.country=USA"
+                                + "&size=10");
 
                 HttpRequest request = HttpRequest.newBuilder(uri)
                                 .header("Accept", "application/json")
@@ -90,13 +94,17 @@ public class MapTools {
 
                 checkForApiKey();
 
-                URI uri = URI.create(
-                                REVERSE_URL
-                                                + "?api_key=" + apiKey
-                                                + "&point.lat=" + coordinates.getLatitude()
-                                                + "&point.lon=" + coordinates.getLongitude()
-                                                + "&boundary.country=USA"
-                                                + "&size=10");
+                URI uri;
+                try {
+                        uri = URI.create(REVERSE_URL
+                                + "?api_key=" + apiKey
+                                + "&point.lat=" + coordinates.getLatitude()
+                                + "&point.lon=" + coordinates.getLongitude()
+                                + "&boundary.country=USA"
+                                + "&size=10");
+                } catch (NullPointerException e) {
+                        return Optional.empty();
+                }
 
                 HttpRequest request = HttpRequest.newBuilder(uri)
                                 .header("Accept", "application/json")
@@ -119,8 +127,12 @@ public class MapTools {
                                 .fromJsonObject(response.body())
                                 .get("features");
 
-                String bestResult = findBestState(features);
-                return State.fromAbbreviation(bestResult);
+                try {
+                        String bestResult = findBestState(features);
+                        return State.fromAbbreviation(bestResult);
+                } catch (IllegalArgumentException e) {
+                        return Optional.empty();
+                }
         }
 
         /**
