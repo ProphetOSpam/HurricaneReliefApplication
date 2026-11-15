@@ -8,6 +8,7 @@ import com.one_half_men.app.hurricane_application.HurricaneApplication;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -21,6 +22,9 @@ public class Login {
     private MFXPasswordField password;
 
     @FXML
+    private Label loginError;
+
+    @FXML
     private void onPasswordFieldKeyPressed(KeyEvent key) {
         if (key.getCode() == KeyCode.ENTER)
             login();
@@ -32,6 +36,7 @@ public class Login {
             APP.login(username.getText(), password.getText());
             System.out.println(APP.getLoggedInUser().get().getUsername());
         } catch (AccountLoginError e) {
+            loginError.setText(e.toString());
             System.err.println(e);
             return;
         }

@@ -50,12 +50,12 @@ public class App extends Application {
     }
 
     private static Parent loadFXML(String fxml) {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        FXMLLoader loader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         try {
-			return fxmlLoader.load();
-		} catch (IOException e) {
+            return loader.load();
+        } catch (IOException e) {
             throw new RuntimeException(e);
-		}
+        }
     }
 
     public static void main(String[] args) {
