@@ -1,13 +1,5 @@
 package com.one_half_men.app;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
 import java.io.IOException;
 
 import com.one_half_men.app.hurricane_application.HurricaneApplication;
@@ -16,12 +8,16 @@ import fr.brouillard.oss.cssfx.CSSFX;
 import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
-
     private static Scene scene;
 
     @Override
@@ -49,13 +45,17 @@ public class App extends Application {
         HurricaneApplication.getInstance().write();
     }
 
-    public static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) {
         scene.setRoot(loadFXML(fxml));
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
+    private static Parent loadFXML(String fxml) {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+        try {
+			return fxmlLoader.load();
+		} catch (IOException e) {
+            throw new RuntimeException(e);
+		}
     }
 
     public static void main(String[] args) {

@@ -3,11 +3,14 @@ package com.one_half_men.app.page;
 import com.one_half_men.app.error.AccountCreationError;
 import com.one_half_men.app.error.AccountLoginError;
 import com.one_half_men.app.hurricane_application.HurricaneApplication;
+import com.one_half_men.app.App;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 public class Login {
+    private static final HurricaneApplication APP = HurricaneApplication.getInstance();
+
     @FXML
     private TextField username;
 
@@ -16,26 +19,26 @@ public class Login {
 
     @FXML
     private void login() {
-        var app = HurricaneApplication.getInstance();
-
         try {
-            app.login(username.getText(), password.getText());
-            System.out.println("Logged in!");
+            APP.login(username.getText(), password.getText());
         } catch (AccountLoginError e) {
             System.err.println(e);
+            return;
         }
+
+        System.out.println("Logged in!");
+        App.setRoot("Feed");
     }
 
     @FXML
     private void createAccount() {
-        var app = HurricaneApplication.getInstance();
-
         try {
-            app.createAccount(username.getText(), password.getText());
-            System.out.println("Created the account");
+            APP.createAccount(username.getText(), password.getText());
         } catch (AccountCreationError e) {
             System.err.println(e);
             return;
         }
+
+        System.out.println("Created the account");
     }
 }
