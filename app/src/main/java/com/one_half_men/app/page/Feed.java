@@ -8,16 +8,15 @@ import com.one_half_men.app.hurricane_application.HurricaneApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 
-public class Feed extends VBox implements Initializable {
+public class Feed implements Initializable {
     private static final HurricaneApplication APP = HurricaneApplication.getInstance();
 
     @FXML
-    private Label feed$username;
+    private Label label;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        feed$username.setText(APP.getLoggedInUser().get().getUsername());
+        label.setText(APP.getLoggedInUser().get().getUsername());
     }
 }

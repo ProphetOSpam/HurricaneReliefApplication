@@ -1,32 +1,41 @@
 package com.one_half_men.app.page;
 
+import com.one_half_men.app.App;
 import com.one_half_men.app.error.AccountCreationError;
 import com.one_half_men.app.error.AccountLoginError;
 import com.one_half_men.app.hurricane_application.HurricaneApplication;
-import com.one_half_men.app.App;
 
+import io.github.palexdev.materialfx.controls.MFXPasswordField;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class Login {
     private static final HurricaneApplication APP = HurricaneApplication.getInstance();
 
     @FXML
-    private TextField username;
+    private MFXTextField username;
 
     @FXML
-    private TextField password;
+    private MFXPasswordField password;
+
+    @FXML
+    private void onPasswordFieldKeyPressed(KeyEvent key) {
+        if (key.getCode() == KeyCode.ENTER)
+            login();
+    }
 
     @FXML
     private void login() {
         try {
             APP.login(username.getText(), password.getText());
+            System.out.println(APP.getLoggedInUser().get().getUsername());
         } catch (AccountLoginError e) {
             System.err.println(e);
             return;
         }
 
-        System.out.println("Logged in!");
         App.setRoot("Feed");
     }
 

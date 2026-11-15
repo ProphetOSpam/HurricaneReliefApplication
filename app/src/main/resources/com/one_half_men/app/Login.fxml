@@ -12,7 +12,7 @@
       <Label text="Login" />
 
             <MFXTextField fx:id="username" floatMode="BORDER" floatingText="Username" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" />
-      <MFXPasswordField fx:id="password" floatMode="BORDER" floatingText="Password" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" />
+      <MFXPasswordField fx:id="password" floatMode="BORDER" floatingText="Password" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" onKeyPressed="#onPasswordFieldKeyPressed" />
 
       <MFXButton alignment="CENTER" buttonType="RAISED" onAction="#login" text="Login" />
       <MFXButton buttonType="RAISED" onAction="#createAccount" text="Create an Account" />
