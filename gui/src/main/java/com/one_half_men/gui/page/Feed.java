@@ -1,4 +1,4 @@
-package com.one_half_men.app.page;
+package com.one_half_men.gui.page;
 
 import com.one_half_men.app.hurricane_application.HurricaneApplication;
 

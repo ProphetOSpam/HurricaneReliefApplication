@@ -15,8 +15,9 @@
     </properties>
 
     <modules>
-        <module>app</module>
         <module>annotations</module>
+        <module>app</module>
+        <module>gui</module>
     </modules>
 
     <build>

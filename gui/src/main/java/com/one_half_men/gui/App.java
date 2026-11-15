@@ -1,4 +1,4 @@
-package com.one_half_men.app;
+package com.one_half_men.gui;
 
 import java.io.IOException;
 

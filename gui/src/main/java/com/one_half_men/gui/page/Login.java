@@ -1,6 +1,6 @@
-package com.one_half_men.app.page;
+package com.one_half_men.gui.page;
 
-import com.one_half_men.app.App;
+import com.one_half_men.gui.App;
 import com.one_half_men.app.error.AccountCreationError;
 import com.one_half_men.app.error.AccountLoginError;
 import com.one_half_men.app.hurricane_application.HurricaneApplication;
